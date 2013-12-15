@@ -1,0 +1,17 @@
+teamNames: Red, Blue, Orange
+friendlyFireDisabledRegions: pvp
+Red:
+  score: 0
+  color: RED
+  friendlyFire: false
+  players: []
+Blue:
+  score: 0
+  color: BLUE
+  friendlyFire: false
+  players: []
+Orange:
+  score: 0
+  color: ORANGE
+  friendlyFire: true
+  players: []

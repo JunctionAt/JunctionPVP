@@ -1,0 +1,30 @@
+name: JunctionPVP
+version: 1.0-SNAPSHOT
+description: Junction PVP Plugin for Revision 2
+author: [zifnab06]
+website: http://github.com/junctionat/JunctionPVP
+
+main: at.junction.pvp.JunctionPVP
+database: false
+
+commands:
+  teams:
+    description: View a list of teams and team members.
+    permission: junction.pvp.teams
+    usage: /teams
+  forceteam:
+    description: Forcibly change someone's team.
+    permission: junction.pvp.forceteam
+    usage: /forceteam player teamname
+
+permissions:
+  junction.pvp.staff:
+    description: Staff access.
+    default: false
+    children:
+      junction.pvp.forceteam
+        description: Allow a player to forcibly change another player's team
+        default: false
+      junction.pvp.teams:
+        description: Allows a player to list teams
+        default: true
