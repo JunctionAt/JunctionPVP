@@ -7,16 +7,16 @@ Teams:
 
 How to tell what team a player is on:
     OfflinePlayers are stored in the Team object, and the config.yml.
-    (NYI) Each player has a metadata value, JunctionPVP.team, stored at login.
-    (NYI) Metadata changed when the player changes teams.
+    Each player has a metadata value, JunctionPVP.team, stored at login.
+    Metadata changed when the player changes teams.
 
 PVP:
     Requires WorldGuard
     (NYI) Friendly Fire can be disabled/enabled per team. Only affects defined regions in friendlyFireDisabledRegions. To disable globally, set to \_\_GLOBAL\_\_.  Defaults to 'pvp'.
 
 Joining Teams:
-    (NYI) Each player is given one free team join. Players name is stored upon using this
-    (NYI) First join is used by stepping through portals at spawn
+    Each player is given one free team join. Players name is stored upon using this
+    First join is used by stepping into portals at spawn
     (NYI) Subsequent joins require the player to place a diamond block at the team they wish to joins spawn
         (NYI) Switching teams costs one diamond block.
             (NYI) Using BlockPlaceEvent @ coords
@@ -28,7 +28,8 @@ PvP Timer:
         (NYI) 30s PvP disabled upon entering pvp zone
         (NYI) 30s PvP enabled after last PvP action and leaving zone
 
-
+Beds:
+    (NYI) Only allowed to spawn via bed in the region defined
 
 Commands:
     /teams: list teams. Perm: junctionpvp.teams.
