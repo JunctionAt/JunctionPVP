@@ -56,13 +56,13 @@ Beds:
     (NYI) Only allowed to spawn via bed in the region defined
 
 Mob Spawns:
-    (NYI) Increase up to 2x at x=0. At 1333, back to 1x. 
+    Double in PvP zone
     
-    (NYI) Double drops for mobs at 2x. Ratio out to 1x. 
+    Double drops for mobs at 2x. Ratio out to 1x.
     
-    (NYI) Randomly set Charged Creepers to Creepers (25% @ 0, 0% @ 1333)
+    Set Charged Creepers to Creepers (first will be charged, second won't be)
     
-    (NYI) Add Invincible Cow to spawn. 
+    Add Invincible Cow to spawn.
     
 Nether:
     (NYI) Team spawn portals go back to main spawn portal & Main goes to correct team's portal

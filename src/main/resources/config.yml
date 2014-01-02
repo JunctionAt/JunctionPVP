@@ -1,5 +1,5 @@
 teamNames: Red, Blue, Orange
-friendlyFireDisabledRegions: pvp
+pvpZoneName: pvp
 Red:
   score: 0
   color: RED
