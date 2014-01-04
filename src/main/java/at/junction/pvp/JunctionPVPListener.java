@@ -79,7 +79,6 @@ class JunctionPVPListener implements Listener {
         }
     }
 
-
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoin(PlayerJoinEvent event) {
         String teamName = plugin.getTeam(event.getPlayer().getName());
@@ -140,15 +139,14 @@ class JunctionPVPListener implements Listener {
             if (plugin.isPvpRegion(event.getEntity().getLocation())) {
                 Player damager = (Player) event.getDamager();
                 Player entity = (Player) event.getEntity();
-                if (event.getEntity().hasMetadata("JunctionPVP.team") && event.getDamager().hasMetadata("JunctionPVP.team")) {
-                    if (plugin.teams.get(damager.getName()).equals(plugin.teams.get(entity.getName()))) {
-                        if (plugin.teams.get(damager.getName()).isFriendlyFire())
-                            return;
-                        event.setCancelled(true);
-                        damager.sendMessage("Friendly Fire is disabled!");
-                    }
+                if (plugin.teams.get(damager.getName()).equals(plugin.teams.get(entity.getName()))) {
+                    if (plugin.teams.get(damager.getName()).isFriendlyFire())
+                        return;
+                    event.setCancelled(true);
+                    damager.sendMessage("Friendly Fire is disabled!");
                 }
             }
         }
     }
 }
+
