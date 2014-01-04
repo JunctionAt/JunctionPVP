@@ -108,6 +108,7 @@ public class JunctionPVP  extends JavaPlugin{
     public void debugLogger(String message){
         if (!config.DEBUG) return;
         getLogger().info(message);
+        getServer().broadcastMessage(message);
     }
 
 }

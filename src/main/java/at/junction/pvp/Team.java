@@ -125,6 +125,7 @@ public class Team {
                 sb.append(", ");
             }
         }
+        if (sb.length() == 0) return null;
         return sb.substring(0, sb.length()-2);
     }
 
