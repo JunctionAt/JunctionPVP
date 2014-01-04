@@ -83,6 +83,32 @@ public class JunctionPVP  extends JavaPlugin{
                 if (i != args.length-1)
                     teamName += " ";
             }
+        } else if (name.equalsIgnoreCase("removeteam")){
+            if (args.length != 1){
+                sender.sendMessage(ChatColor.RED + "Usage: /removeteam <player>");
+                return true;
+            }
+            //Remove player from team objects
+            for (Team t : teams.values()){
+                if (t.containsPlayer(args[0])){
+                    try {
+                        t.removePlayer(args[0]);
+                        break;
+                    } catch (Exception e){
+                        //do nothing, won't happen
+                    }
+                }
+            }
+
+            //If player is online, remove metadata
+            Player p = getServer().getPlayer(args[0]);
+            if (p != null){
+                if (p.hasMetadata("JunctionPVP.team"))
+                    p.removeMetadata("JunctionPVP.team", this);
+            }
+
+            sender.sendMessage("Done");
+
         }
         return true;
     }
@@ -110,6 +136,7 @@ public class JunctionPVP  extends JavaPlugin{
         boolean inRegion = false;
         if (teamRegion.contains(location.getBlockX(), location.getBlockY(), location.getBlockZ())){
             inRegion = true;
+            debugLogger(String.format("%s is in team %s region", location.getBlock().toString(), t.getName()));
         }
         return inRegion;
     }

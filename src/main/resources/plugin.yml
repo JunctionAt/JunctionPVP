@@ -9,22 +9,29 @@ database: false
 
 commands:
   teams:
-    description: View a list of teams and team members.
+    description: View a list of teams, online team members, and scores.
     permission: junction.pvp.teams
     usage: /teams
   forceteam:
-    description: Forcibly change someone's team.
-    permission: junction.pvp.forceteam
+    description: Force a player to a given team
+    permission: junction.pvp.team.add
     usage: /forceteam player teamname
+  removeteam:
+    description: Removes a player from any assigned teams
+    permission: junction.pvp.team.remove
+    usage: /removeteam player
 
 permissions:
-  junction.pvp.staff:
-    description: Staff access.
-    default: false
+  junction.pvp.teams:
+    description: Allows a player to list teams
+    default: true
+  junction.pvp.tech:
+    description: tech/debug access
+    default: op
     children:
-      junction.pvp.forceteam:
-        description: Allow a player to forcibly change another player's team
-        default: false
-      junction.pvp.teams:
-        description: Allows a player to list teams
-        default: true
+      junction.pvp.team.add:
+        description: Add player to team
+        default: op
+      junction.pvp.team.remove:
+        description: Remove player from team
+        default: op
