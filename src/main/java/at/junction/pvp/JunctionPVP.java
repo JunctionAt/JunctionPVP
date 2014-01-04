@@ -56,6 +56,7 @@ public class JunctionPVP  extends JavaPlugin{
         for (Team team : teams.values())
             team.saveTeam();
         config.save();
+        this.saveConfig();
         getLogger().info("JunctionPVP Disabled");
     }
 
