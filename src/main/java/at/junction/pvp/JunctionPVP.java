@@ -1,6 +1,7 @@
 package at.junction.pvp;
 
 
+import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -90,8 +91,14 @@ public class JunctionPVP  extends JavaPlugin{
     * returns true if location is in pvp region
      */
     public boolean isPvpRegion(Location location) {
-        debugLogger(String.format("Checking if %s is in pvp region", location.toString()));
-        return wg.getRegionManager(location.getWorld()).hasRegion(config.PVP_REGION);
+        ProtectedRegion pvpRegion = wg.getRegionManager(location.getWorld()).getRegion(config.PVP_REGION);
+        boolean inRegion = false;
+        if (pvpRegion.contains(location.getBlockX(), location.getBlockY(), location.getBlockZ())){
+            inRegion = true;
+        }
+        debugLogger(String.format("%s is in pvp region", location.getBlock().toString()));
+        return inRegion;
+
     }
 
     /*
@@ -99,9 +106,11 @@ public class JunctionPVP  extends JavaPlugin{
     * return true if location is inside team's region
      */
     public boolean isTeamRegion(Team t, Location location){
-
-        boolean inRegion = wg.getRegionManager(location.getWorld()).hasRegion(t.getRegionName());
-        debugLogger(String.format("Checking if %s in %s's region (%s)", location.toString(), t.getName(), inRegion));
+        ProtectedRegion teamRegion = wg.getRegionManager(location.getWorld()).getRegion(t.getRegionName());
+        boolean inRegion = false;
+        if (teamRegion.contains(location.getBlockX(), location.getBlockY(), location.getBlockZ())){
+            inRegion = true;
+        }
         return inRegion;
     }
 

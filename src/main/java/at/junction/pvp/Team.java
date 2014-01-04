@@ -136,6 +136,7 @@ public class Team {
     public void saveTeam(){
         plugin.getConfig().set(name + ".players", players);
         plugin.getConfig().set(name + ".score", score);
+
     }
 
     //Returns an offlinePlayer from a playername
