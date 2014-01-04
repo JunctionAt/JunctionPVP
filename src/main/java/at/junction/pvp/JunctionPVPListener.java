@@ -1,6 +1,7 @@
 package at.junction.pvp;
 
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -89,6 +90,10 @@ class JunctionPVPListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerRespawn(PlayerRespawnEvent event) {
         if (event.isBedSpawn()) {
+            if (!plugin.isTeamRegion(plugin.teams.get(event.getPlayer().getName()), event.getRespawnLocation())){
+                event.setRespawnLocation(plugin.teams.get(event.getPlayer().getName()).getJoinLocation());
+                event.getPlayer().sendMessage(ChatColor.RED + "[PVP]You can only spawn in a bed in your team's region. Back to spawn with you...");
+            }
         }
     }
 
