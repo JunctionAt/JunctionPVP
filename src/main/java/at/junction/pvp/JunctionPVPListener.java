@@ -64,7 +64,6 @@ public class JunctionPVPListener implements Listener {
                 }
                 return;
             }
-            return;
         }
     }
 
