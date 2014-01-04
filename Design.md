@@ -6,28 +6,27 @@ Teams:
     
     Team stores list of players, as well as methods for adding/removing members, a chat color, and a score
     
-    (NYI) Players team is shown in the PvP zone using their nameplate color (TagAPI? Scoreboards?). Possibly override helmets with an item?
+    (NYI) Players team is shown in the PvP zone using their nameplate color. Use scoreboards.
 
 
 How to tell what team a player is on:
 
     OfflinePlayers are stored in the Team object, and the config.yml.
 
-    Player names are stored in map at startup, login, and team changes
+    Plugin contains a 'teams' map of <TeamName(String), Team(Team)>
 
-    Plugin contains a 'teams' map of <PlayerName, Team>
+    Player has a metadata value of "JunctionPVP.team" set. If it exists, they're on a team.
 
 
 PVP:
 
-    Requires WorldGuard
+    Requires WorldGuard flag 'pvp' to be set to allow for pvp regions.
     
-    Friendly Fire can be disabled/enabled per team. Only affects PvP region.
-    
+    Friendly Fire can be disabled/enabled per team. Only effects PVP region (ie, arenas will work elsehwere)
 
 Joining Teams:
 
-    Each player is given one free team join. Players name is stored upon using this
+    Any player without "JunctionPVP.team" metadata has not joined a team yet. As such, its free.
 
     First join is used by stepping into portals at spawn
 
@@ -64,10 +63,6 @@ Mob Spawns:
     
     Add Invincible Cow to spawn. (Gene says HI)
     
-Nether:
-
-    (NYI) Team spawn portals go back to main spawn portal & Main goes to correct team's portal
-
 Commands:
 
     /teams: list teams. Perm: junctionpvp.teams.
