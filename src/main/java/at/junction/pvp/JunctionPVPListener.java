@@ -1,9 +1,7 @@
 package at.junction.pvp;
 
 
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Creeper;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -26,6 +24,9 @@ public class JunctionPVPListener implements Listener {
     private final JunctionPVP plugin;
     //Semaphore for mob spawning - if true, mob will spawn without firing EntitySpawnEvent
     private boolean _MOB_SPAWN = false;
+    //Equipment/Weapon for spawned mobs
+    private ItemStack[] _EQUIPMENT;
+    private ItemStack _WEAPON;
     private ArrayList<EntityType> hostileEntities = new ArrayList<EntityType>();
 
     public JunctionPVPListener(JunctionPVP plugin) {
@@ -98,12 +99,20 @@ public class JunctionPVPListener implements Listener {
             if (event.getSpawnReason() != CreatureSpawnEvent.SpawnReason.SPAWNER) {
                 //Set metadata so we know it wasn't spawned in a spawner (important for later)
                 event.getEntity().setMetadata("JunctionPVP.spawn", new FixedMetadataValue(plugin, "JunctionPVP.spawn"));
-                if (_MOB_SPAWN) return;
+                if (_MOB_SPAWN) {
+                    event.getEntity().getEquipment().setArmorContents(_EQUIPMENT);
+                    event.getEntity().getEquipment().setItemInHand(_WEAPON);
+                    _EQUIPMENT = null;
+                    _WEAPON = null;
+                    return;
+                }
                 if (hostileEntities.contains(event.getEntityType())) {
                     if (event.getEntityType().equals(EntityType.CREEPER)) {
                         ((Creeper) event.getEntity()).setPowered(true);
                     }
                     _MOB_SPAWN = true;
+                    _EQUIPMENT = event.getEntity().getEquipment().getArmorContents();
+                    _WEAPON = event.getEntity().getEquipment().getItemInHand();
                     event.getLocation().getWorld().spawnEntity(event.getLocation(), event.getEntityType());
                     _MOB_SPAWN = false;
                 }
