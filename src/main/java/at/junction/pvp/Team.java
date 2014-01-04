@@ -60,7 +60,11 @@ public class Team {
     }
 
     public boolean isPortalLocation(Location loc){
-        return portalLocation.contains(loc);
+        for (Location l: portalLocation){
+            if (plugin.equalLocations(loc, l))
+                    return true;
+        }
+        return false;
     }
 
     public int getScore() {

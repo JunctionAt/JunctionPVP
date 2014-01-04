@@ -107,4 +107,9 @@ public class JunctionPVP  extends JavaPlugin{
         getLogger().info(message);
     }
 
+    public boolean equalLocations(Location one, Location two){
+        return one.getWorld().getName().equals(two.getWorld().getName()) && one.getBlockX() == two.getBlockY() &&
+                one.getBlockY() == two.getBlockY() && one.getBlockZ() == two.getBlockZ();
+    }
+
 }
