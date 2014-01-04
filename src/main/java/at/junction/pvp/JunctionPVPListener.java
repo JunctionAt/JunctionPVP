@@ -10,6 +10,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -90,7 +91,7 @@ class JunctionPVPListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerRespawn(PlayerRespawnEvent event) {
         if (event.isBedSpawn()) {
-            if (!plugin.isTeamRegion(plugin.teams.get(event.getPlayer().getName()), event.getRespawnLocation())){
+            if (!plugin.isTeamRegion(plugin.teams.get(event.getPlayer().getName()), event.getRespawnLocation())) {
                 event.setRespawnLocation(plugin.teams.get(event.getPlayer().getName()).getJoinLocation());
                 event.getPlayer().sendMessage(ChatColor.RED + "[PVP]You can only spawn in a bed in your team's region. Back to spawn with you...");
             }
@@ -100,7 +101,7 @@ class JunctionPVPListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onMobSpawnEvent(CreatureSpawnEvent event) {
 
-        if (plugin.isPvpRegion(event.getEntity().getLocation())){
+        if (plugin.isPvpRegion(event.getEntity().getLocation())) {
             if (event.getSpawnReason() != CreatureSpawnEvent.SpawnReason.SPAWNER) {
                 //Set metadata so we know it wasn't spawned in a spawner (important for later)
                 event.getEntity().setMetadata("junctionpvp-spawn", new FixedMetadataValue(plugin, "junctionpvp-spawn"));
@@ -119,15 +120,31 @@ class JunctionPVPListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onMobDeathEvent(EntityDeathEvent event) {
-        if (plugin.isPvpRegion(event.getEntity().getLocation())){
+        if (plugin.isPvpRegion(event.getEntity().getLocation())) {
             if (hostileEntities.contains(event.getEntityType())) {
-                if (event.getEntity().hasMetadata("junctionpvp-spawn")){
+                if (event.getEntity().hasMetadata("junctionpvp-spawn")) {
                     //Double EXP
                     event.setDroppedExp(event.getDroppedExp() * 2);
                     //Double drops
                     List<ItemStack> drops = new ArrayList<ItemStack>(event.getDrops());
                     event.getDrops().addAll(drops);
 
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void onEntityDamageByEntityEvent(EntityDamageByEntityEvent event) {
+        if (event.getEntity() instanceof Player && event.getDamager() instanceof Player) {
+            if (plugin.isPvpRegion(event.getEntity().getLocation())) {
+                Player damager = (Player) event.getDamager();
+                Player entity = (Player) event.getEntity();
+                if (event.getEntity().hasMetadata("JunctionPVP.team") && event.getDamager().hasMetadata("JunctionPVP.team")) {
+                    if (plugin.teams.get(damager.getName()).equals(plugin.teams.get(entity.getName()))) {
+                        event.setCancelled(true);
+                        damager.sendMessage("Friendly Fire is disabled!");
+                    }
                 }
             }
         }

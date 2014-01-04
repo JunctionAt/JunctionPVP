@@ -53,7 +53,7 @@ PvP Timer:
         (NYI) 30s PvP enabled after last PvP action and leaving zone
 
 Beds:
-    (NYI) Only allowed to spawn via bed in the region defined
+    Only allowed to spawn via bed in the region defined
 
 Mob Spawns:
     Double in PvP zone
