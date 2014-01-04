@@ -72,13 +72,12 @@ public class Team {
 
 
     public boolean isPortalLocation(Location loc){
-        plugin.debugLogger(String.format("Checking to see if %s %s %s is a join portal", loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
         for (Location l: portalLocation){
-            plugin.debugLogger(String.format("Comparing %s %s", loc.toString(), l.toString()));
             if ((l.getWorld().getName().equals(loc.getWorld().getName())) &&
                     (l.getBlockX() == loc.getBlockX()) &&
                     (l.getBlockY() == loc.getBlockY()) &&
                     (l.getBlockZ() == loc.getBlockZ())){
+                plugin.debugLogger(String.format("enetered %s spawn portal", name));
                 return true;
             }
         }
