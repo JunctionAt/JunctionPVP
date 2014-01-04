@@ -62,7 +62,7 @@ Mob Spawns:
     
     Set Charged Creepers to Creepers (first will be charged, second won't be)
     
-    Add Invincible Cow to spawn.
+    Add Invincible Cow to spawn. (Gene says HI)
     
 Nether:
     (NYI) Team spawn portals go back to main spawn portal & Main goes to correct team's portal

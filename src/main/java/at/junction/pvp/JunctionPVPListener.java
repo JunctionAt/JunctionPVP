@@ -119,7 +119,13 @@ class JunctionPVPListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onMobDeathEvent(EntityDeathEvent event) {
-        if (plugin.isPvpRegion(event.getEntity().getLocation())) {
+        if (event.getEntity() instanceof Player){
+            Player killer = event.getEntity().getKiller();
+            if (!plugin.teams.get(killer.getName()).equals(plugin.teams.get(((Player) event.getEntity()).getName()))){
+                plugin.teams.get(killer.getName()).addPoint();
+            }
+        }
+        else if (plugin.isPvpRegion(event.getEntity().getLocation())) {
             if (hostileEntities.contains(event.getEntityType())) {
                 if (event.getEntity().hasMetadata("junctionpvp-spawn")) {
                     //Double EXP
