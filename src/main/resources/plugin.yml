@@ -24,6 +24,10 @@ commands:
     description: Print team info
     permission: junction.pvp.team.print
     usage: /printteam
+  printmetadata:
+    description: Prints player's metadata
+    usage: /printmetadata <player>
+    permission: junctoin.pvp.player.metadata
 
 permissions:
   junction.pvp.teams:
@@ -41,4 +45,7 @@ permissions:
         default: op
       junction.pvp.team.print:
         description: Print team info to console
+        default: op
+      junction.pvp.player.metadata:
+        description: Print player metadata
         default: op
