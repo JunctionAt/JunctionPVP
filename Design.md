@@ -24,7 +24,7 @@ PVP:
 
     Requires WorldGuard
     
-    (NYI) Friendly Fire can be disabled/enabled per team. Only affects defined regions in friendlyFireDisabledRegions. To disable globally, set to \_\_GLOBAL\_\_.  Defaults to 'pvp'.
+    Friendly Fire can be disabled/enabled per team. Only affects PvP region.
     
 
 Joining Teams:
