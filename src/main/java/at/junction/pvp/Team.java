@@ -27,7 +27,7 @@ public class Team {
         this.plugin = plugin;
         this.name = name;
         players = new ArrayList<OfflinePlayer>();
-        for (String player : plugin.getConfig().getStringList(name + ".players.")){
+        for (String player : plugin.getConfig().getStringList(name + ".players")){
             players.add(getOfflinePlayer(player));
         }
         score = plugin.getConfig().getInt(name + ".score");
