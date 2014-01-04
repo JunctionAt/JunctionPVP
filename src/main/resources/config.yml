@@ -7,7 +7,7 @@ Red:
   bedRegion: red
   players: []
   joinLocation: world,-10,75,0
-  portalLocation: world,-10,75,0
+  portalLocation: []
 Blue:
   score: 0
   color: BLUE
@@ -15,7 +15,7 @@ Blue:
   bedRegion: blue
   players: []
   joinLocation: world,10,75,0
-  portalLocation: world,10,75,0
+  portalLocation: []
 Orange:
   score: 0
   color: ORANGE
@@ -23,5 +23,5 @@ Orange:
   bedRegion: orange
   players: []
   joinLocation: world,0,75,10
-  portalLocation: world,0,75,10
+  portalLocation: []
 freeJoinUsed: []
