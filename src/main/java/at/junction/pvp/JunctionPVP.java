@@ -95,8 +95,8 @@ public class JunctionPVP  extends JavaPlugin{
         boolean inRegion = false;
         if (pvpRegion.contains(location.getBlockX(), location.getBlockY(), location.getBlockZ())){
             inRegion = true;
+            debugLogger(String.format("%s is in pvp region", location.getBlock().toString()));
         }
-        debugLogger(String.format("%s is in pvp region", location.getBlock().toString()));
         return inRegion;
 
     }
