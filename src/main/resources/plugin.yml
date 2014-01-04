@@ -22,7 +22,7 @@ permissions:
     description: Staff access.
     default: false
     children:
-      junction.pvp.forceteam
+      junction.pvp.forceteam:
         description: Allow a player to forcibly change another player's team
         default: false
       junction.pvp.teams:
