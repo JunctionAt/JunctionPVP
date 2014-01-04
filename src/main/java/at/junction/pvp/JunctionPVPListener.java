@@ -19,6 +19,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 
@@ -45,7 +46,7 @@ class JunctionPVPListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerMoveEvent(PlayerMoveEvent event) {
         //noinspection LoopStatementThatDoesntLoop
-        for (Team t : plugin.teams.values()) {
+        for (Team t : new HashSet<Team>(plugin.teams.values())) {
             System.out.println(t.getName());
             if (t.isPortalLocation(event.getTo())) {
                 //Check to see if the player has used their free team change

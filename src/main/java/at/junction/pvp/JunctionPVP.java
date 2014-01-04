@@ -13,6 +13,7 @@ import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 
 class JunctionPVP  extends JavaPlugin{
@@ -50,17 +51,15 @@ class JunctionPVP  extends JavaPlugin{
 
     @Override
     public void onDisable(){
-        Set<Teams> temp = new Set<Team>
-        for (Team team : teams.values()){
+        for (Team team : new HashSet<Team>(teams.values()))
             team.saveTeam();
-        }
         config.save();
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String name, String[] args) {
         if (name.equalsIgnoreCase("teams")){
-            for (Team team : teams.values()){
+            for (Team team : new HashSet<Team>(teams.values())){
                 sender.sendMessage(team.getColor() + team.getName() + ChatColor.RESET + ":");
                 sender.sendMessage(team.getFormattedPlayerList());
             }
