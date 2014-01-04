@@ -92,7 +92,9 @@ public class Team {
     public void addPlayer(String playerName) throws Exception{
         if (containsPlayer(playerName)) throw new Exception("Player exists already on that team");
         players.add(getOfflinePlayer(playerName));
-        plugin.teams.put(playerName, this);
+
+        plugin.getServer().getPlayer(playerName).teleport(joinLocation);
+
     }
 
     public void removePlayer(String playerName) throws Exception{
