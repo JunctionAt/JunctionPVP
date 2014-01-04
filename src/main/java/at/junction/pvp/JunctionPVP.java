@@ -9,13 +9,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
-import com.sk89q.worldguard.LocalPlayer;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
-import com.sk89q.worldguard.protection.ApplicableRegionSet;
-import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.Set;
 
 class JunctionPVP  extends JavaPlugin{
     public Configuration config;
@@ -52,6 +50,7 @@ class JunctionPVP  extends JavaPlugin{
 
     @Override
     public void onDisable(){
+        Set<Teams> temp = new Set<Team>
         for (Team team : teams.values()){
             team.saveTeam();
         }

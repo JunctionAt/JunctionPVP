@@ -13,9 +13,7 @@ How to tell what team a player is on:
 
     OfflinePlayers are stored in the Team object, and the config.yml.
 
-    Each player has a metadata value, JunctionPVP.team, stored at login.
-
-    Metadata changed when the player changes teams. (NEEDS TO BE REMOVED)
+    Player names are stored in map at startup, login, and team changes
 
     Plugin contains a 'teams' map of <PlayerName, Team>
 
@@ -53,9 +51,11 @@ PvP Timer:
         (NYI) 30s PvP enabled after last PvP action and leaving zone
 
 Beds:
+
     Only allowed to spawn via bed in the region defined
 
 Mob Spawns:
+
     Double in PvP zone
     
     Double drops for mobs at 2x. Ratio out to 1x.
@@ -65,6 +65,7 @@ Mob Spawns:
     Add Invincible Cow to spawn. (Gene says HI)
     
 Nether:
+
     (NYI) Team spawn portals go back to main spawn portal & Main goes to correct team's portal
 
 Commands:

@@ -10,6 +10,7 @@ public class Configuration {
     public final List<String> TEAM_NAMES;
     //List of players who have used their free team join
     public final List<String> FREE_JOIN_USED;
+    //War Region
     public final String PVP_REGION;
 
     public Configuration(JunctionPVP plugin){
@@ -25,6 +26,4 @@ public class Configuration {
     public void save(){
         plugin.getConfig().set("freeJoinUsed", FREE_JOIN_USED);
     }
-
-
 }

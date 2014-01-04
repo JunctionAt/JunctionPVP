@@ -66,16 +66,21 @@ class Team {
         return players.contains(getOfflinePlayer(playerName));
 
     }
+
     public void addPlayer(String playerName) throws Exception{
         if (containsPlayer(playerName)) throw new Exception("Player exists already on that team");
         players.add(getOfflinePlayer(playerName));
+        plugin.teams.put(playerName, this);
     }
 
     public void removePlayer(String playerName) throws Exception{
         if (!containsPlayer(playerName)) throw new Exception("Player is not on that team");
         players.remove(getOfflinePlayer(playerName));
+        plugin.teams.remove(playerName);
     }
-
+    /*
+    * Add single or multiple points to a team
+     */
     public void addPoint(Integer... amount) {
         if (amount.length == 0) {
             score++;
@@ -83,6 +88,9 @@ class Team {
             score+= amount[0];
         }
     }
+    /*
+    * Returns list of players as 'player1, player2, player3'
+     */
     public String getFormattedPlayerList(){
         StringBuilder sb = new StringBuilder();
         for (OfflinePlayer op : players){
@@ -94,7 +102,9 @@ class Team {
         return sb.substring(0, sb.length()-2);
     }
 
-    //Saves team to config file
+    /*
+    * Save team config
+     */
     public void saveTeam(){
         plugin.getConfig().set(name + ".players", players);
         plugin.getConfig().set(name + ".score", score);

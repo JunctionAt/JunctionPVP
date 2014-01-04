@@ -36,7 +36,6 @@ class JunctionPVPListener implements Listener {
         hostileEntities.add(EntityType.SKELETON);
         hostileEntities.add(EntityType.WITCH);
         hostileEntities.add(EntityType.SPIDER);
-
     }
 
     /*
@@ -45,7 +44,6 @@ class JunctionPVPListener implements Listener {
      */
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerMoveEvent(PlayerMoveEvent event) {
-
         //noinspection LoopStatementThatDoesntLoop
         for (Team t : plugin.teams.values()) {
             System.out.println(t.getName());
@@ -75,6 +73,10 @@ class JunctionPVPListener implements Listener {
         }
     }
 
+    /*
+    * onPlayerRespawn
+    * Cancel bed spawns in bad areas
+     */
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerRespawn(PlayerRespawnEvent event) {
         if (event.isBedSpawn()) {
@@ -84,10 +86,12 @@ class JunctionPVPListener implements Listener {
             }
         }
     }
-
+    /*
+    * onMobSpawnEvent
+    * Double mobs iff in pvp region
+     */
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onMobSpawnEvent(CreatureSpawnEvent event) {
-
         if (plugin.isPvpRegion(event.getEntity().getLocation())) {
             if (event.getSpawnReason() != CreatureSpawnEvent.SpawnReason.SPAWNER) {
                 //Set metadata so we know it wasn't spawned in a spawner (important for later)
@@ -104,9 +108,13 @@ class JunctionPVPListener implements Listener {
             }
         }
     }
-
+    /*
+    * onEntityDeathEvent
+    * Add points to teams on player deaths
+    * Double drops in pvp zone on death
+     */
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onMobDeathEvent(EntityDeathEvent event) {
+    public void onEntityDeathEvent(EntityDeathEvent event) {
         if (event.getEntity() instanceof Player){
             Player killer = event.getEntity().getKiller();
             if (!plugin.teams.get(killer.getName()).equals(plugin.teams.get(((Player) event.getEntity()).getName()))){
@@ -121,13 +129,15 @@ class JunctionPVPListener implements Listener {
                     //Double drops
                     List<ItemStack> drops = new ArrayList<ItemStack>(event.getDrops());
                     event.getDrops().addAll(drops);
-
                 }
             }
         }
     }
-
-    @EventHandler
+    /*
+    * onEntityDamageByEntityEvent
+    * If players are on the same team and team has friendly fire disabled, cancel damage
+     */
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onEntityDamageByEntityEvent(EntityDamageByEntityEvent event) {
         if (event.getEntity() instanceof Player && event.getDamager() instanceof Player) {
             if (plugin.isPvpRegion(event.getEntity().getLocation())) {
