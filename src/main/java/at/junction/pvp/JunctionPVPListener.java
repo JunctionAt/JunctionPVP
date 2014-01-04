@@ -44,23 +44,17 @@ public class JunctionPVPListener implements Listener {
      */
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerMoveEvent(PlayerMoveEvent event) {
+        //Player is on a team, we don't care where they are
+        if (event.getPlayer().hasMetadata("JunctionPVP.team")) return;
+
         for (Team t : plugin.teams.values()) {
             System.out.println(t.getName());
             if (t.isPortalLocation(event.getTo())) {
-                plugin.debugLogger(String.format("%s entered %s portal", event.getPlayer().getName(), t.getName()));
-                //Check to see if the player has used their free team change
-                if (plugin.config.FREE_JOIN_USED.contains(event.getPlayer().getName())){
-                    event.getPlayer().sendMessage("You have already joined a team. You can change teams by going to that team's spawn!");
-                    return;
-                }
                 try {
                     t.addPlayer(event.getPlayer().getName());
                 } catch (Exception e) {
                     return;
                 }
-
-                //Add player to FREE_JOIN_USED
-                plugin.config.FREE_JOIN_USED.add(event.getPlayer().getName());
 
                 //Add metadata to player
                 event.getPlayer().sendMessage(t.getColor() + "Welcome to " + t.getName());
