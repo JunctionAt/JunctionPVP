@@ -13,11 +13,14 @@ public class Configuration {
     //War Region
     public final String PVP_REGION;
 
+    public final boolean DEBUG;
+
     public Configuration(JunctionPVP plugin){
         this.plugin = plugin;
         TEAM_NAMES = plugin.getConfig().getStringList("teamNames");
         FREE_JOIN_USED = plugin.getConfig().getStringList("freeJoinUsed");
         PVP_REGION = plugin.getConfig().getString("pvpRegionName");
+        DEBUG = plugin.getConfig().getBoolean("debug");
     }
     public void load(){
         plugin.reloadConfig();

@@ -12,6 +12,7 @@ public class Team {
     private final JunctionPVP plugin;
     private final String name;
     private final List<OfflinePlayer> players;
+
     private int score;
 
     private final ChatColor color;
@@ -62,6 +63,9 @@ public class Team {
         return portalLocation.contains(loc);
     }
 
+    public int getScore() {
+        return score;
+    }
     public boolean containsPlayer(String playerName){
         return players.contains(getOfflinePlayer(playerName));
 
@@ -82,9 +86,12 @@ public class Team {
     * Add single or multiple points to a team
      */
     public void addPoint(Integer... amount) {
+
         if (amount.length == 0) {
+            plugin.debugLogger(String.format("%s scored a point", name));
             score++;
         } else if (amount.length == 1){
+            plugin.debugLogger(String.format("%s scored %s points", name, amount[0].toString()));
             score+= amount[0];
         }
     }

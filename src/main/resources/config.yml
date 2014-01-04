@@ -1,3 +1,4 @@
+debug: false
 teamNames: Red, Blue, Orange
 pvpRegionName: pvp
 Red:

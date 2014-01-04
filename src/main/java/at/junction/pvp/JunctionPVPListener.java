@@ -45,6 +45,7 @@ public class JunctionPVPListener implements Listener {
      */
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerMoveEvent(PlayerMoveEvent event) {
+        plugin.debugLogger(event.toString());
         //noinspection LoopStatementThatDoesntLoop
         for (Team t : new HashSet<Team>(plugin.teams.values())) {
             System.out.println(t.getName());
@@ -80,6 +81,7 @@ public class JunctionPVPListener implements Listener {
      */
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerRespawn(PlayerRespawnEvent event) {
+        plugin.debugLogger(event.toString());
         if (event.isBedSpawn()) {
             if (!plugin.isTeamRegion(plugin.teams.get(event.getPlayer().getName()), event.getRespawnLocation())) {
                 event.setRespawnLocation(plugin.teams.get(event.getPlayer().getName()).getJoinLocation());
@@ -93,6 +95,7 @@ public class JunctionPVPListener implements Listener {
      */
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onMobSpawnEvent(CreatureSpawnEvent event) {
+        plugin.debugLogger(event.toString());
         if (plugin.isPvpRegion(event.getEntity().getLocation())) {
             if (event.getSpawnReason() != CreatureSpawnEvent.SpawnReason.SPAWNER) {
                 //Set metadata so we know it wasn't spawned in a spawner (important for later)
@@ -116,8 +119,13 @@ public class JunctionPVPListener implements Listener {
      */
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityDeathEvent(EntityDeathEvent event) {
+        plugin.debugLogger(event.toString());
         if (event.getEntity() instanceof Player){
+
             Player killer = event.getEntity().getKiller();
+            //Not killed by player, return
+            if (killer == null) return;
+            //If they aren't on the same team, add a point ot the killer's team
             if (!plugin.teams.get(killer.getName()).equals(plugin.teams.get(((Player) event.getEntity()).getName()))){
                 plugin.teams.get(killer.getName()).addPoint();
             }
@@ -140,6 +148,7 @@ public class JunctionPVPListener implements Listener {
      */
     @EventHandler(priority = EventPriority.MONITOR)
     public void onEntityDamageByEntityEvent(EntityDamageByEntityEvent event) {
+        plugin.debugLogger(event.toString());
         if (event.getEntity() instanceof Player && event.getDamager() instanceof Player) {
             if (plugin.isPvpRegion(event.getEntity().getLocation())) {
                 Player damager = (Player) event.getDamager();

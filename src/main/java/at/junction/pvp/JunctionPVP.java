@@ -46,7 +46,7 @@ public class JunctionPVP  extends JavaPlugin{
             teams.put(team, new Team(this, team));
         }
 
-
+        getLogger().info("JunctionPVP Enabled");
     }
 
     @Override
@@ -54,13 +54,14 @@ public class JunctionPVP  extends JavaPlugin{
         for (Team team : new HashSet<Team>(teams.values()))
             team.saveTeam();
         config.save();
+        getLogger().info("JunctionPVP Disabled");
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String name, String[] args) {
         if (name.equalsIgnoreCase("teams")){
             for (Team team : new HashSet<Team>(teams.values())){
-                sender.sendMessage(team.getColor() + team.getName() + ChatColor.RESET + ":");
+                sender.sendMessage(String.format("%s%s (Score: %s)%s:", team.getColor().toString(), team.getName(), team.getScore(), ChatColor.RESET.toString()));
                 sender.sendMessage(team.getFormattedPlayerList());
             }
         } else if (name.equalsIgnoreCase("forceteam")){
@@ -88,6 +89,7 @@ public class JunctionPVP  extends JavaPlugin{
     * returns true if location is in pvp region
      */
     public boolean isPvpRegion(Location location) {
+        debugLogger(String.format("Checking if %s is in pvp region", location.toString()));
         return wg.getRegionManager(location.getWorld()).hasRegion(config.PVP_REGION);
     }
 
@@ -96,19 +98,13 @@ public class JunctionPVP  extends JavaPlugin{
     * return true if location is inside team's region
      */
     public boolean isTeamRegion(Team t, Location location){
+        debugLogger(String.format("Checking if %s in %s's region", location.toString(), t.getName()));
         return wg.getRegionManager(location.getWorld()).hasRegion(t.getName());
     }
 
-    /*
-    * getTeam(String player)
-    * returns the name of the team a player is on
-    * If player is not on a team, returns null
-     */
-    public String getTeam(String player){
-        for (String team : config.TEAM_NAMES){
-            if (teams.get(team).containsPlayer(player)) return team;
-        }
-        return null;
+    public void debugLogger(String message){
+        if (!config.DEBUG) return;
+        getLogger().info(message);
     }
 
 }
