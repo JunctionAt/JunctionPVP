@@ -48,6 +48,7 @@ class JunctionPVPListener implements Listener {
 
         //noinspection LoopStatementThatDoesntLoop
         for (Team t : plugin.teams.values()) {
+            System.out.println(t.getName());
             if (t.isPortalLocation(event.getTo())) {
                 //Check to see if the player has used their free team change
                 if (plugin.config.FREE_JOIN_USED.contains(event.getPlayer().getName()))
@@ -62,28 +63,15 @@ class JunctionPVPListener implements Listener {
                 plugin.config.FREE_JOIN_USED.add(event.getPlayer().getName());
 
                 //Add metadata to player
-                event.getPlayer().setMetadata("JunctionPVP.team", new FixedMetadataValue(plugin, t.getName()));
                 event.getPlayer().sendMessage(t.getColor() + "Welcome to " + t.getName());
                 for (Player p : plugin.getServer().getOnlinePlayers()) {
-                    if (p.hasMetadata("JunctionPVP.team")) {
-                        if (p.getMetadata("JunctionPVP.team").get(0).asString().equals(t.getName())) {
-                            p.sendMessage(t.getColor() + "Please welcome " + event.getPlayer().getName() + "to your team!");
-                        }
+                    if (plugin.teams.values().contains(p.getName())){
+                        p.sendMessage(t.getColor() + "Please welcome " + event.getPlayer().getName() + "to your team!");
                     }
                 }
-
-
                 return;
             }
             return;
-        }
-    }
-
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerJoin(PlayerJoinEvent event) {
-        String teamName = plugin.getTeam(event.getPlayer().getName());
-        if (teamName != null) {
-            event.getPlayer().setMetadata("JunctionPVP.team", new FixedMetadataValue(plugin, teamName));
         }
     }
 

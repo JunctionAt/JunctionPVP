@@ -15,9 +15,9 @@ How to tell what team a player is on:
 
     Each player has a metadata value, JunctionPVP.team, stored at login.
 
-    Metadata changed when the player changes teams.
+    Metadata changed when the player changes teams. (NEEDS TO BE REMOVED)
 
-
+    Plugin contains a 'teams' map of <PlayerName, Team>
 
 
 PVP:
