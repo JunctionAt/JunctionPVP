@@ -109,7 +109,12 @@ public class JunctionPVP  extends JavaPlugin{
 
             sender.sendMessage("Done");
 
+        } else if (name.equalsIgnoreCase("printteam")){
+            for (Team t : teams.values()){
+                sender.sendMessage(t.toString());
+            }
         }
+
         return true;
     }
     /*

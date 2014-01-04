@@ -154,4 +154,37 @@ public class Team {
 
 
     }
+
+    public String toString(){
+        StringBuilder data = new StringBuilder();
+        data.append(color).append(name);
+        data.append("\n");
+
+        data.append("region name: ").append(regionName);
+        data.append("\n");
+
+        data.append("players: ");
+        for (OfflinePlayer p : players){
+            data.append(p).append(", ");
+        }
+        data.append("\n");
+
+        data.append("score: ").append(score);
+        data.append("\n");
+
+        data.append("friendly fire: ").append(friendlyFire);
+        data.append("\n");
+
+        data.append("joinLocation: ").append(joinLocation);
+        data.append("\n");
+
+        data.append("portal location: ");
+
+        for (Location l : portalLocation){
+            data.append(l.getWorld().getName()).append(l.getBlockX()).append(" ").append(l.getBlockY()).append(" ").append(l.getBlockZ()).append(" | ");
+        }
+        data.append("\n");
+        
+        return data.toString();
+    }
 }

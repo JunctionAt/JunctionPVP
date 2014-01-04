@@ -20,6 +20,10 @@ commands:
     description: Removes a player from any assigned teams
     permission: junction.pvp.team.remove
     usage: /removeteam player
+  printteam:
+    description: Print team info
+    permission: junction.pvp.team.print
+    usage: /printteam
 
 permissions:
   junction.pvp.teams:
@@ -34,4 +38,7 @@ permissions:
         default: op
       junction.pvp.team.remove:
         description: Remove player from team
+        default: op
+      junction.pvp.team.print:
+        description: Print team info to console
         default: op
