@@ -1,5 +1,5 @@
 teamNames: Red, Blue, Orange
-pvpZoneName: pvp
+pvpRegionName: pvp
 Red:
   score: 0
   color: RED

@@ -2,6 +2,7 @@ package at.junction.pvp;
 
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -84,10 +85,22 @@ class JunctionPVP  extends JavaPlugin{
         }
         return true;
     }
-
-    public boolean hasRegion(Block block) {
-        return wg.getRegionManager(block.getWorld()).getApplicableRegions(block.getLocation()).size() != 0;
+    /*
+    * isPvpRegion(Location location)
+    * returns true if location is in pvp region
+     */
+    public boolean isPvpRegion(Location location) {
+        return wg.getRegionManager(location.getWorld()).hasRegion(config.PVP_REGION);
     }
+
+    /*
+    * isTeamRegion(Team t, Location location)
+    * return true if location is inside team's region
+     */
+    public boolean isTeamRegion(Team t, Location location){
+        return wg.getRegionManager(location.getWorld()).hasRegion(t.getName());
+    }
+
     /*
     * getTeam(String player)
     * returns the name of the team a player is on

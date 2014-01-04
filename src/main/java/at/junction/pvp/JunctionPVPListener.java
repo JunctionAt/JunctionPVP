@@ -89,15 +89,13 @@ class JunctionPVPListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerRespawn(PlayerRespawnEvent event) {
         if (event.isBedSpawn()) {
-
         }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onMobSpawnEvent(CreatureSpawnEvent event) {
 
-        //if in pvp region
-        {
+        if (plugin.isPvpRegion(event.getEntity().getLocation())){
             if (event.getSpawnReason() != CreatureSpawnEvent.SpawnReason.SPAWNER) {
                 //Set metadata so we know it wasn't spawned in a spawner (important for later)
                 event.getEntity().setMetadata("junctionpvp-spawn", new FixedMetadataValue(plugin, "junctionpvp-spawn"));
@@ -114,11 +112,9 @@ class JunctionPVPListener implements Listener {
         }
     }
 
-
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onMobDeathEvent(EntityDeathEvent event) {
-        //if in pvp region
-        {
+        if (plugin.isPvpRegion(event.getEntity().getLocation())){
             if (hostileEntities.contains(event.getEntityType())) {
                 if (event.getEntity().hasMetadata("junctionpvp-spawn")){
                     //Double EXP
