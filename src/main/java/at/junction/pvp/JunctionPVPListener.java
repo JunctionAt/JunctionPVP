@@ -45,7 +45,7 @@ public class JunctionPVPListener implements Listener {
      */
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerMoveEvent(PlayerMoveEvent event) {
-        plugin.debugLogger(event.toString());
+        plugin.debugLogger(event.getTo().toString());
         //noinspection LoopStatementThatDoesntLoop
         for (Team t : new HashSet<Team>(plugin.teams.values())) {
             System.out.println(t.getName());
@@ -81,9 +81,11 @@ public class JunctionPVPListener implements Listener {
      */
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerRespawn(PlayerRespawnEvent event) {
-        plugin.debugLogger(event.toString());
+
         if (event.isBedSpawn()) {
+            plugin.debugLogger("Player tried to spawn in bed...");
             if (!plugin.isTeamRegion(plugin.teams.get(event.getPlayer().getName()), event.getRespawnLocation())) {
+                plugin.debugLogger(String.format("sending %s to %s join location", event.getPlayer().getName(), plugin.teams.get(event.getPlayer().getName()).getName()));
                 event.setRespawnLocation(plugin.teams.get(event.getPlayer().getName()).getJoinLocation());
                 event.getPlayer().sendMessage(ChatColor.RED + "[PVP]You can only spawn in a bed in your team's region. Back to spawn with you...");
             }
