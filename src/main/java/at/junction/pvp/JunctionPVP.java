@@ -114,6 +114,17 @@ public class JunctionPVP  extends JavaPlugin{
             for (Team t : teams.values()){
                 sender.sendMessage(t.toString());
             }
+        } else if (name.equalsIgnoreCase("printMetadata")){
+            if (args.length != 1) {
+                sender.sendMessage(ChatColor.RED + "Usage: printMetadata playername");
+                return true;
+            }
+            Player p = getServer().getPlayer(args[0]);
+            if (p != null){
+                if (p.hasMetadata("JunctionPVP.team")){
+                    sender.sendMessage((String)p.getMetadata("JunctionPVP.team").get(0).value());
+                }
+            }
         }
 
         return true;
