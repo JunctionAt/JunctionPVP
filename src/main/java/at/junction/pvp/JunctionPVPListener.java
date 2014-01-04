@@ -58,7 +58,7 @@ public class JunctionPVPListener implements Listener {
                 //Add metadata to player
                 event.getPlayer().sendMessage(t.getColor() + "Welcome to " + t.getName());
                 for (Player p : plugin.getServer().getOnlinePlayers()) {
-                    if (p.hasMetadata("junctionPVP.team") && p.getMetadata("JunctionPVP.team").get(0).toString().equals(t.getName())){
+                    if (p.hasMetadata("junctionPVP.team") && p.getMetadata("JunctionPVP.team").get(0).value().equals(t.getName())){
                         p.sendMessage(t.getColor() + "Please welcome " + event.getPlayer().getName() + "to your team!");
                     }
                 }
@@ -76,9 +76,9 @@ public class JunctionPVPListener implements Listener {
         if (event.isBedSpawn()) {
             plugin.debugLogger("Player tried to spawn in bed...");
             //If player isn't in their team region, disable bed spawns
-            if (!plugin.isTeamRegion(plugin.teams.get(event.getPlayer().getMetadata("JunctionPVP.team").get(0).toString()), event.getRespawnLocation())) {
+            if (!plugin.isTeamRegion(plugin.teams.get(event.getPlayer().getMetadata("JunctionPVP.team").get(0).value()), event.getRespawnLocation())) {
                 plugin.debugLogger(String.format("sending %s to %s join location", event.getPlayer().getName(), plugin.teams.get(event.getPlayer().getName()).getName()));
-                event.setRespawnLocation(plugin.teams.get(event.getPlayer().getMetadata("JunctionPVP.team").get(0).toString()).getJoinLocation());
+                event.setRespawnLocation(plugin.teams.get(event.getPlayer().getMetadata("JunctionPVP.team").get(0).value()).getJoinLocation());
                 event.getPlayer().sendMessage("You can only spawn in a bed in your team's region. Back to your team's spawn with you...");
             }
         }
@@ -120,9 +120,9 @@ public class JunctionPVPListener implements Listener {
             //Not killed by player, return
             if (killer == null) return;
             //If they aren't on the same team, add a point ot the killer's team
-            if (!event.getEntity().getMetadata("JunctionPVP.team").toString()
-                    .equals(killer.getMetadata("JunctionPVP.team").toString())){
-                plugin.teams.get(killer.getMetadata("JunctionPVP.team").get(0).toString()).addPoint();
+            if (!event.getEntity().getMetadata("JunctionPVP.team").get(0).value()
+                    .equals(killer.getMetadata("JunctionPVP.team").get(0).value())){
+                plugin.teams.get(killer.getMetadata("JunctionPVP.team").get(0).value()).addPoint();
             }
         }
         else if (plugin.isPvpRegion(event.getEntity().getLocation())) {
@@ -149,10 +149,10 @@ public class JunctionPVPListener implements Listener {
                 Player damager = (Player) event.getDamager();
                 Player entity = (Player) event.getEntity();
                 //If players are on the same team
-                if (damager.getMetadata("JunctionPVP.team").get(0).toString()
-                        .equals(entity.getMetadata("JunctionPVP.team").get(0).toString())){
+                if (damager.getMetadata("JunctionPVP.team").get(0).value()
+                        .equals(entity.getMetadata("JunctionPVP.team").get(0).value())){
                     //return iff friendly fire is enabled
-                    if (plugin.teams.get(damager.getMetadata("JunctionPVP.team").get(0).toString()).isFriendlyFire())
+                    if (plugin.teams.get(damager.getMetadata("JunctionPVP.team").get(0).value()).isFriendlyFire())
                         return;
 
                     //Cancel event - FriendlyFire is disabled, players are on the same team
