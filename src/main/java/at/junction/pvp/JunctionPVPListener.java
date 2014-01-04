@@ -142,6 +142,8 @@ class JunctionPVPListener implements Listener {
                 Player entity = (Player) event.getEntity();
                 if (event.getEntity().hasMetadata("JunctionPVP.team") && event.getDamager().hasMetadata("JunctionPVP.team")) {
                     if (plugin.teams.get(damager.getName()).equals(plugin.teams.get(entity.getName()))) {
+                        if (plugin.teams.get(damager.getName()).isFriendlyFire())
+                            return;
                         event.setCancelled(true);
                         damager.sendMessage("Friendly Fire is disabled!");
                     }
