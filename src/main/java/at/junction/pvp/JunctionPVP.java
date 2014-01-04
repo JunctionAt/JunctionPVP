@@ -18,6 +18,7 @@ import java.util.Set;
 
 public class JunctionPVP  extends JavaPlugin{
     public Configuration config;
+    //Teams SHOULD BE teamName -> team
     public HashMap<String, Team> teams;
     private WorldGuardPlugin wg;
 
@@ -51,7 +52,7 @@ public class JunctionPVP  extends JavaPlugin{
 
     @Override
     public void onDisable(){
-        for (Team team : new HashSet<Team>(teams.values()))
+        for (Team team : teams.values())
             team.saveTeam();
         config.save();
         getLogger().info("JunctionPVP Disabled");
@@ -60,7 +61,7 @@ public class JunctionPVP  extends JavaPlugin{
     @Override
     public boolean onCommand(CommandSender sender, Command command, String name, String[] args) {
         if (name.equalsIgnoreCase("teams")){
-            for (Team team : new HashSet<Team>(teams.values())){
+            for (Team team : teams.values()){
                 sender.sendMessage(String.format("%s%s (Score: %s)%s:", team.getColor().toString(), team.getName(), team.getScore(), ChatColor.RESET.toString()));
                 sender.sendMessage(team.getFormattedPlayerList());
             }
@@ -98,18 +99,15 @@ public class JunctionPVP  extends JavaPlugin{
     * return true if location is inside team's region
      */
     public boolean isTeamRegion(Team t, Location location){
-        debugLogger(String.format("Checking if %s in %s's region", location.toString(), t.getName()));
-        return wg.getRegionManager(location.getWorld()).hasRegion(t.getName());
+
+        boolean inRegion = wg.getRegionManager(location.getWorld()).hasRegion(t.getRegionName());
+        debugLogger(String.format("Checking if %s in %s's region (%s)", location.toString(), t.getName(), inRegion));
+        return inRegion;
     }
 
     public void debugLogger(String message){
         if (!config.DEBUG) return;
         getLogger().info(message);
-    }
-
-    public boolean equalLocations(Location one, Location two){
-        return one.getWorld().getName().equals(two.getWorld().getName()) && one.getBlockX() == two.getBlockY() &&
-                one.getBlockY() == two.getBlockY() && one.getBlockZ() == two.getBlockZ();
     }
 
 }

@@ -12,7 +12,6 @@ public class Configuration {
     public final List<String> FREE_JOIN_USED;
     //War Region
     public final String PVP_REGION;
-
     public final boolean DEBUG;
 
     public Configuration(JunctionPVP plugin){

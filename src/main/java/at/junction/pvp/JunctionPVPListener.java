@@ -19,7 +19,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 
@@ -46,13 +45,15 @@ public class JunctionPVPListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerMoveEvent(PlayerMoveEvent event) {
         plugin.debugLogger(event.getTo().toString());
-        //noinspection LoopStatementThatDoesntLoop
-        for (Team t : new HashSet<Team>(plugin.teams.values())) {
+
+        for (Team t : plugin.teams.values()) {
             System.out.println(t.getName());
             if (t.isPortalLocation(event.getTo())) {
                 //Check to see if the player has used their free team change
-                if (plugin.config.FREE_JOIN_USED.contains(event.getPlayer().getName()))
+                if (plugin.config.FREE_JOIN_USED.contains(event.getPlayer().getName())){
+                    event.getPlayer().sendMessage("You have already joined a team. You can change teams by going to that team's spawn!");
                     return;
+                }
                 try {
                     t.addPlayer(event.getPlayer().getName());
                 } catch (Exception e) {
@@ -65,7 +66,7 @@ public class JunctionPVPListener implements Listener {
                 //Add metadata to player
                 event.getPlayer().sendMessage(t.getColor() + "Welcome to " + t.getName());
                 for (Player p : plugin.getServer().getOnlinePlayers()) {
-                    if (plugin.teams.values().contains(p.getName())){
+                    if (p.getMetadata("JunctionPVP.team").get(0).toString().equals(t.getName())){
                         p.sendMessage(t.getColor() + "Please welcome " + event.getPlayer().getName() + "to your team!");
                     }
                 }
@@ -84,24 +85,25 @@ public class JunctionPVPListener implements Listener {
 
         if (event.isBedSpawn()) {
             plugin.debugLogger("Player tried to spawn in bed...");
-            if (!plugin.isTeamRegion(plugin.teams.get(event.getPlayer().getName()), event.getRespawnLocation())) {
+            //If player isn't in their team region, disable bed spawns
+            if (!plugin.isTeamRegion(plugin.teams.get(event.getPlayer().getMetadata("JunctionPVP.team").get(0).toString()), event.getRespawnLocation())) {
                 plugin.debugLogger(String.format("sending %s to %s join location", event.getPlayer().getName(), plugin.teams.get(event.getPlayer().getName()).getName()));
-                event.setRespawnLocation(plugin.teams.get(event.getPlayer().getName()).getJoinLocation());
-                event.getPlayer().sendMessage(ChatColor.RED + "[PVP]You can only spawn in a bed in your team's region. Back to spawn with you...");
+                event.setRespawnLocation(plugin.teams.get(event.getPlayer().getMetadata("JunctionPVP.team").get(0).toString()).getJoinLocation());
+                event.getPlayer().sendMessage("You can only spawn in a bed in your team's region. Back to your team's spawn with you...");
             }
         }
     }
     /*
     * onMobSpawnEvent
     * Double mobs iff in pvp region
+    * If mob is a creeper, make it charged (first only)
      */
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onMobSpawnEvent(CreatureSpawnEvent event) {
-        plugin.debugLogger(event.toString());
         if (plugin.isPvpRegion(event.getEntity().getLocation())) {
             if (event.getSpawnReason() != CreatureSpawnEvent.SpawnReason.SPAWNER) {
                 //Set metadata so we know it wasn't spawned in a spawner (important for later)
-                event.getEntity().setMetadata("junctionpvp-spawn", new FixedMetadataValue(plugin, "junctionpvp-spawn"));
+                event.getEntity().setMetadata("JunctionPVP.spawn", new FixedMetadataValue(plugin, "JunctionPVP.spawn"));
                 if (_MOB_SPAWN) return;
                 if (hostileEntities.contains(event.getEntityType())) {
                     if (event.getEntityType().equals(EntityType.CREEPER)) {
@@ -128,13 +130,14 @@ public class JunctionPVPListener implements Listener {
             //Not killed by player, return
             if (killer == null) return;
             //If they aren't on the same team, add a point ot the killer's team
-            if (!plugin.teams.get(killer.getName()).equals(plugin.teams.get(((Player) event.getEntity()).getName()))){
-                plugin.teams.get(killer.getName()).addPoint();
+            if (!event.getEntity().getMetadata("JunctionPVP.team").toString()
+                    .equals(killer.getMetadata("JunctionPVP.team").toString())){
+                plugin.teams.get(killer.getMetadata("JunctionPVP.team").get(0).toString()).addPoint();
             }
         }
         else if (plugin.isPvpRegion(event.getEntity().getLocation())) {
             if (hostileEntities.contains(event.getEntityType())) {
-                if (event.getEntity().hasMetadata("junctionpvp-spawn")) {
+                if (event.getEntity().hasMetadata("JunctionPVP.spawn")) {
                     //Double EXP
                     event.setDroppedExp(event.getDroppedExp() * 2);
                     //Double drops
@@ -155,12 +158,30 @@ public class JunctionPVPListener implements Listener {
             if (plugin.isPvpRegion(event.getEntity().getLocation())) {
                 Player damager = (Player) event.getDamager();
                 Player entity = (Player) event.getEntity();
-                if (plugin.teams.get(damager.getName()).equals(plugin.teams.get(entity.getName()))) {
-                    if (plugin.teams.get(damager.getName()).isFriendlyFire())
+                //If players are on the same team
+                if (damager.getMetadata("JunctionPVP.team").get(0).toString()
+                        .equals(entity.getMetadata("JunctionPVP.team").get(0).toString())){
+                    //return iff friendly fire is enabled
+                    if (plugin.teams.get(damager.getMetadata("JunctionPVP.team").get(0).toString()).isFriendlyFire())
                         return;
+
+                    //Cancel event - FriendlyFire is disabled, players are on the same team
                     event.setCancelled(true);
                     damager.sendMessage("Friendly Fire is disabled!");
                 }
+            }
+        }
+    }
+
+    /*
+    * Add metadata to player on join
+     */
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        for (Team t : plugin.teams.values()){
+            if (t.containsPlayer(event.getPlayer().getName())){
+                event.getPlayer().setMetadata("JunctionPVP.team", new FixedMetadataValue(plugin, t.getName()));
+                return;
             }
         }
     }

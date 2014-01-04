@@ -21,6 +21,8 @@ public class Team {
     private final Location joinLocation;
     private final List<Location> portalLocation;
 
+    private final String regionName;
+
     public Team(JunctionPVP plugin, String name){
         this.plugin = plugin;
         this.name = name;
@@ -33,13 +35,14 @@ public class Team {
         friendlyFire = plugin.getConfig().getBoolean(name + ".friendlyFire");
         joinLocation = getLocation(plugin.getConfig().getString(name+".joinLocation"));
         List<String> portalCoords = plugin.getConfig().getStringList(name+".portalLocation");
-
         portalLocation = new ArrayList<Location>();
         for (String coord : portalCoords){
             Location temp = getLocation(coord);
             if (temp != null)
                 portalLocation.add(temp);
         }
+
+        regionName = plugin.getConfig().getString(name + ".regionName");
 
     }
 
@@ -59,17 +62,29 @@ public class Team {
         return joinLocation;
     }
 
+    public int getScore() {
+        return score;
+    }
+
+    public String getRegionName() {
+        return regionName;
+    }
+
+
     public boolean isPortalLocation(Location loc){
+        plugin.debugLogger(String.format("Checking to see if %s %s %s is a join portal", loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
         for (Location l: portalLocation){
-            if (plugin.equalLocations(loc, l))
-                    return true;
+            plugin.debugLogger(String.format("Comparing %s %s", loc.toString(), l.toString()));
+            if ((l.getWorld().getName().equals(loc.getWorld().getName())) &&
+                    (l.getBlockX() == loc.getBlockX()) &&
+                    (l.getBlockY() == loc.getBlockY()) &&
+                    (l.getBlockZ() == loc.getBlockZ())){
+                return true;
+            }
         }
         return false;
     }
 
-    public int getScore() {
-        return score;
-    }
     public boolean containsPlayer(String playerName){
         return players.contains(getOfflinePlayer(playerName));
 

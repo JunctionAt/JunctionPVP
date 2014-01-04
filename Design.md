@@ -71,11 +71,22 @@ Nether:
 Commands:
 
     /teams: list teams. Perm: junctionpvp.teams.
-    
-    /score: list score. Perm: junctionpvp.score
-    
+
     /forceteam <player> <newteam>: force a player to join a team. Perm: junctionpvp.forceteam
     
-    /addpoint <team> \[<value>\]: adds points to a team. Defaults to 1, value is optional. Perm: junctionpvp.addpoint
+    (NYI) /addpoint <team> \[<value>\]: adds points to a team. Defaults to 1, value is optional. Perm: junctionpvp.addpoint
 
 
+
+
+Code:
+
+    Metadata:
+
+        Players:
+
+            JunctionPVP.team: player's team
+
+        Mobs:
+
+            JunctionPVP.spawn: Used in onMobSpawn event, doubles drops/exp if exists

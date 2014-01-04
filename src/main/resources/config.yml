@@ -5,7 +5,7 @@ Red:
   score: 0
   color: RED
   friendlyFire: false
-  bedRegion: red
+  regionName: red
   players: []
   joinLocation: world,-10,75,0
   portalLocation: []
@@ -13,7 +13,7 @@ Blue:
   score: 0
   color: BLUE
   friendlyFire: false
-  bedRegion: blue
+  regionName: blue
   players: []
   joinLocation: world,10,75,0
   portalLocation: []
@@ -21,7 +21,7 @@ Orange:
   score: 0
   color: ORANGE
   friendlyFire: true
-  bedRegion: orange
+  regionName: orange
   players: []
   joinLocation: world,0,75,10
   portalLocation: []
