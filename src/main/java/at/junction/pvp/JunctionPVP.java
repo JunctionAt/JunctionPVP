@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-class JunctionPVP  extends JavaPlugin{
+public class JunctionPVP  extends JavaPlugin{
     public Configuration config;
     public HashMap<String, Team> teams;
     private WorldGuardPlugin wg;
