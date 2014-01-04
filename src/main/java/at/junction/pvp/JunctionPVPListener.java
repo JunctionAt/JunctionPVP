@@ -56,7 +56,10 @@ public class JunctionPVPListener implements Listener {
                 }
 
                 //Add metadata to player
+                plugin.debugLogger(String.format("Adding metadata to %s", event.getPlayer().getName()));
                 event.getPlayer().setMetadata("JunctionPVP.team", new FixedMetadataValue(plugin, t.getName()));
+                plugin.debugLogger(String.format("%s %s the correct metadata", event.getPlayer().getName(), event.getPlayer().hasMetadata("JunctionPVP.team") ? "has" : "doesn't have"));
+
                 event.getPlayer().sendMessage(t.getColor() + "Welcome to " + t.getName());
                 for (Player p : plugin.getServer().getOnlinePlayers()) {
                     if (p.hasMetadata("junctionPVP.team") && p.getMetadata("JunctionPVP.team").get(0).value().equals(t.getName())){
