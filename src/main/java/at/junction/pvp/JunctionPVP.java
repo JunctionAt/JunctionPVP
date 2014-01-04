@@ -2,10 +2,16 @@ package at.junction.pvp;
 
 
 import org.bukkit.ChatColor;
+import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import com.sk89q.worldguard.LocalPlayer;
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import com.sk89q.worldguard.protection.ApplicableRegionSet;
+import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
 import java.io.File;
 import java.util.HashMap;
@@ -13,6 +19,7 @@ import java.util.HashMap;
 class JunctionPVP  extends JavaPlugin{
     public Configuration config;
     public HashMap<String, Team> teams;
+    private WorldGuardPlugin wg;
 
     @Override
     public void onEnable(){
@@ -21,6 +28,12 @@ class JunctionPVP  extends JavaPlugin{
             getConfig().options().copyDefaults(true);
             saveConfig();
         }
+        Plugin plugin = getServer().getPluginManager().getPlugin("WorldGuard");
+        if ((plugin == null) || !(plugin instanceof WorldGuardPlugin)){
+            getLogger().severe("Worldguard not detected. JunctionPVP not loaded");
+            return;
+        }
+        wg = (WorldGuardPlugin) plugin;
         //Register Listener
 
         getServer().getPluginManager().registerEvents(new JunctionPVPListener(this), this);
@@ -32,6 +45,8 @@ class JunctionPVP  extends JavaPlugin{
         for(String team : config.TEAM_NAMES){
             teams.put(team, new Team(this, team));
         }
+
+
     }
 
     @Override
@@ -70,6 +85,9 @@ class JunctionPVP  extends JavaPlugin{
         return true;
     }
 
+    public boolean hasRegion(Block block) {
+        return wg.getRegionManager(block.getWorld()).getApplicableRegions(block.getLocation()).size() != 0;
+    }
     /*
     * getTeam(String player)
     * returns the name of the team a player is on
