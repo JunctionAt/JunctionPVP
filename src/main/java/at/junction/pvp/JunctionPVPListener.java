@@ -126,9 +126,7 @@ public class JunctionPVPListener implements Listener {
      */
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityDeathEvent(EntityDeathEvent event) {
-        plugin.debugLogger(event.toString());
         if (event.getEntity() instanceof Player){
-
             Player killer = event.getEntity().getKiller();
             //Not killed by player, return
             if (killer == null) return;
@@ -156,7 +154,6 @@ public class JunctionPVPListener implements Listener {
      */
     @EventHandler(priority = EventPriority.MONITOR)
     public void onEntityDamageByEntityEvent(EntityDamageByEntityEvent event) {
-        plugin.debugLogger(event.toString());
         if (event.getEntity() instanceof Player && event.getDamager() instanceof Player) {
             if (plugin.isPvpRegion(event.getEntity().getLocation())) {
                 Player damager = (Player) event.getDamager();
