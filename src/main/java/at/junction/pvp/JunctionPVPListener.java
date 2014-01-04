@@ -81,7 +81,7 @@ public class JunctionPVPListener implements Listener {
             plugin.debugLogger("Player tried to spawn in bed...");
             //If player isn't in their team region, disable bed spawns
             if (!plugin.isTeamRegion(plugin.teams.get(event.getPlayer().getMetadata("JunctionPVP.team").get(0).value()), event.getRespawnLocation())) {
-                
+
                 event.setRespawnLocation(plugin.teams.get(event.getPlayer().getMetadata("JunctionPVP.team").get(0).value()).getJoinLocation());
                 event.getPlayer().sendMessage("You can only spawn in a bed in your team's region. Back to your team's spawn with you...");
             }

@@ -135,7 +135,11 @@ public class Team {
     * Save team config
      */
     public void saveTeam(){
-        plugin.getConfig().set(name + ".players", players);
+        List<String> tempPlayerList = new ArrayList<>();
+        for (OfflinePlayer op : players){
+            tempPlayerList.add(op.getName());
+        }
+        plugin.getConfig().set(name + ".players", tempPlayerList);
         plugin.getConfig().set(name + ".score", score);
 
     }
