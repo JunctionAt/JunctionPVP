@@ -93,6 +93,7 @@ public class Team {
         if (containsPlayer(playerName)) throw new Exception("Player exists already on that team");
         players.add(getOfflinePlayer(playerName));
 
+
         plugin.getServer().getPlayer(playerName).teleport(joinLocation);
 
     }
@@ -184,7 +185,7 @@ public class Team {
             data.append(l.getWorld().getName()).append(l.getBlockX()).append(" ").append(l.getBlockY()).append(" ").append(l.getBlockZ()).append(" | ");
         }
         data.append("\n");
-        
+
         return data.toString();
     }
 }

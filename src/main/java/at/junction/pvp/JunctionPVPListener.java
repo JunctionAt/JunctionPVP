@@ -48,7 +48,6 @@ public class JunctionPVPListener implements Listener {
         if (event.getPlayer().hasMetadata("JunctionPVP.team")) return;
 
         for (Team t : plugin.teams.values()) {
-            System.out.println(t.getName());
             if (t.isPortalLocation(event.getTo())) {
                 try {
                     t.addPlayer(event.getPlayer().getName());
@@ -75,7 +74,6 @@ public class JunctionPVPListener implements Listener {
      */
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerRespawn(PlayerRespawnEvent event) {
-
         if (event.isBedSpawn()) {
             plugin.debugLogger("Player tried to spawn in bed...");
             //If player isn't in their team region, disable bed spawns
