@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-class Team {
+public class Team {
     private final JunctionPVP plugin;
     private final String name;
     private final List<OfflinePlayer> players;

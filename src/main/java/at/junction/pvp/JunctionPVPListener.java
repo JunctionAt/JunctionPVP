@@ -23,7 +23,7 @@ import java.util.HashSet;
 import java.util.List;
 
 
-class JunctionPVPListener implements Listener {
+public class JunctionPVPListener implements Listener {
     private final JunctionPVP plugin;
     //Semaphore for mob spawning - if true, mob will spawn without firing EntitySpawnEvent
     private boolean _MOB_SPAWN = false;
