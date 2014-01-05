@@ -221,7 +221,7 @@ public class JunctionPVPListener implements Listener {
                         event.setCancelled(true);
                         event.getPlayer().sendMessage(ChatColor.RED + "You're already on that team!");
                     } else {
-                        if (plugin.lowestScoreTeam().equals(t)){
+                        if (t.equals(plugin.lowestScoreTeam())){
                             //Give them their block back
                             event.getPlayer().getInventory().addItem(new ItemStack(Material.DIAMOND_BLOCK));
                         }
