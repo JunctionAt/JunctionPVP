@@ -177,7 +177,7 @@ public class JunctionPVP  extends JavaPlugin{
             if (t.getScore() == lowScore)
                 return null;
         }
-        debugLogger(String.format("Lowest team is %s", lowTeam == null ? "none" : lowTeam.getName()))
+        debugLogger(String.format("Lowest team is %s", lowTeam == null ? "none" : lowTeam.getName()));
         return lowTeam;
     }
 
