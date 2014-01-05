@@ -207,11 +207,15 @@ public class JunctionPVPListener implements Listener {
             for (Team t : plugin.teams.values()) {
                 Location teamJoinLoc = t.getJoinLocation();
                 Location blockPlacedLocation = event.getBlockPlaced().getLocation();
+
                 if ((teamJoinLoc.getWorld().getName().equals(blockPlacedLocation.getWorld())
-                        && (teamJoinLoc.getBlockY() == blockPlacedLocation.getBlockY())
+                        && (teamJoinLoc.getBlockX() == blockPlacedLocation.getBlockX())
                         && (teamJoinLoc.getBlockY() == blockPlacedLocation.getBlockY())
                         && (teamJoinLoc.getBlockZ() == blockPlacedLocation.getBlockZ()))){
-
+                    if (event.isCancelled()){
+                        event.setCancelled(false);
+                    }
+                    plugin.debugLogger("Block coords match");
                     //Same Block, Swap Teams
                     if (t.containsPlayer(event.getPlayer().getName())){
                         event.setCancelled(true);
