@@ -3,6 +3,7 @@ package at.junction.pvp;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -95,12 +96,23 @@ public class Team {
 
         plugin.getServer().getPlayer(playerName).teleport(joinLocation);
 
+        for (Player p : plugin.getServer().getOnlinePlayers()){
+            if (this.containsPlayer(p.getName())){
+                p.sendMessage(String.format("%sWelcome %s to the %s team!", this.getColor(), playerName, this.getName()));
+            }
+        }
+
     }
 
     public void removePlayer(String playerName) throws Exception{
         if (!containsPlayer(playerName)) throw new Exception("Player is not on that team");
         players.remove(getOfflinePlayer(playerName));
-        plugin.teams.remove(playerName);
+
+        for (Player p : plugin.getServer().getOnlinePlayers()){
+            if (this.containsPlayer(p.getName())){
+                p.sendMessage(String.format("%s%s has left the %s team :(", this.getColor(), playerName, this.getName()));
+            }
+        }
     }
     /*
     * Add single or multiple points to a team
