@@ -233,7 +233,7 @@ public class JunctionPVPListener implements Listener {
                             event.getPlayer().setMetadata("JunctionPVP.team", new FixedMetadataValue(plugin, t.getName()));
                         } catch (Exception e){
                             //Checked earlier, shouldn't happen ever
-                            plugin.getLogger().severe("You broke the universe");
+                            plugin.getLogger().severe("You broke the universe. How could you?");
                         }
 
 
