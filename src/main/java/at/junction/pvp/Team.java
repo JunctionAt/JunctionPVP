@@ -194,6 +194,7 @@ public class Team {
     }
 
     public boolean equals(Team t){
+        if (t == null) return false;
         return name.equals(t.getName());
     }
 }

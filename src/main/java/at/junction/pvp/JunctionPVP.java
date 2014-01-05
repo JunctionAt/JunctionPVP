@@ -168,14 +168,14 @@ public class JunctionPVP  extends JavaPlugin{
      */
     public Team lowestScoreTeam(){
         int lowScore = Integer.MAX_VALUE;
-        Team lowTeam = new Team(this, null);
+        Team lowTeam = null;
         for (Team t : teams.values()){
             if (t.getScore() < lowScore){
                 lowScore = t.getScore();
                 lowTeam = t;
             }
             if (t.getScore() == lowScore)
-                return new Team(this, null);
+                return null;
         }
        return lowTeam;
     }
