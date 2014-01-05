@@ -208,7 +208,7 @@ public class JunctionPVPListener implements Listener {
                 Location teamJoinLoc = t.getJoinLocation();
                 Location blockPlacedLocation = event.getBlockPlaced().getLocation();
 
-                if ((teamJoinLoc.getWorld().getName().equals(blockPlacedLocation.getWorld())
+                if ((teamJoinLoc.getWorld().getName().equals(blockPlacedLocation.getWorld().getName())
                         && (teamJoinLoc.getBlockX() == blockPlacedLocation.getBlockX())
                         && (teamJoinLoc.getBlockY() == blockPlacedLocation.getBlockY())
                         && (teamJoinLoc.getBlockZ() == blockPlacedLocation.getBlockZ()))){
