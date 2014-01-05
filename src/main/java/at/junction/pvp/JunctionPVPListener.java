@@ -96,6 +96,7 @@ public class JunctionPVPListener implements Listener {
                 event.setRespawnLocation(plugin.teams.get(event.getPlayer().getMetadata("JunctionPVP.team").get(0).value()).getJoinLocation());
                 event.getPlayer().sendMessage("You can only spawn in a bed in your team's region. Back to your team's spawn with you...");
             }
+        }
     }
 
     /*

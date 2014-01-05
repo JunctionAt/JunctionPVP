@@ -93,8 +93,6 @@ public class Team {
         if (containsPlayer(playerName)) throw new Exception("Player exists already on that team");
         players.add(getOfflinePlayer(playerName));
 
-        getOfflinePlayer(playerName).getBedSpawnLocation().set
-
         plugin.getServer().getPlayer(playerName).teleport(joinLocation);
 
     }
