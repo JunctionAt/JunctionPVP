@@ -281,7 +281,7 @@ public class JunctionPVPListener implements Listener {
         Player attacker = event.getAttacker();
         plugin.debugLogger(String.format("pvp event: %s hit %s", attacker.getName(), defender.getName()));
         Collection<Player> players = pvpTimes.values();
-        if (players.contains(defender.getName())){
+        if (players.contains(defender)){
             int defendKey = new Random().nextInt();
             int attackKey = new Random().nextInt();
             pvpTimes.put(defendKey, defender);
