@@ -169,6 +169,9 @@ public class JunctionPVPListener implements Listener {
             if (plugin.isPvpRegion(event.getEntity().getLocation())) {
                 Player damager = (Player) event.getDamager();
                 Player entity = (Player) event.getEntity();
+                //If players don't have metadata, we don't care anymore...
+                if (!(damager.hasMetadata("JunctionPVP.team") && entity.hasMetadata("JunctionPVP.team")))
+                    return;
                 //If players are on the same team
                 if (damager.getMetadata("JunctionPVP.team").get(0).value()
                         .equals(entity.getMetadata("JunctionPVP.team").get(0).value())) {
