@@ -230,7 +230,7 @@ public class JunctionPVPListener implements Listener {
                             plugin.teams.get(event.getPlayer().getMetadata("JunctionPVP.team").get(0).value()).removePlayer(event.getPlayer().getName());
                             t.addPlayer(event.getPlayer().getName());
                             event.getPlayer().removeMetadata("JunctionPVP.team", plugin);
-                            event.getPlayer().setMetadata("JunctionPVP.team", new FixedMetadataValue(plugin, "JunctionPVP.team"));
+                            event.getPlayer().setMetadata("JunctionPVP.team", new FixedMetadataValue(plugin, t.getName()));
                         } catch (Exception e){
                             //Checked earlier, shouldn't happen ever
                             plugin.getLogger().severe("You broke the universe");
