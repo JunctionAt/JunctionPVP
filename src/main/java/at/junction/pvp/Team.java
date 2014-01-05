@@ -192,4 +192,8 @@ public class Team {
 
         return data.toString();
     }
+
+    public boolean equals(Team t){
+        return name.equals(t.getName());
+    }
 }

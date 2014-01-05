@@ -1,12 +1,15 @@
 package at.junction.pvp;
 
 
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -15,6 +18,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.Material;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,7 +67,7 @@ public class JunctionPVPListener implements Listener {
 
                 event.getPlayer().sendMessage(t.getColor() + "Welcome to " + t.getName());
                 for (Player p : plugin.getServer().getOnlinePlayers()) {
-                    if (p.hasMetadata("junctionPVP.team") && p.getMetadata("JunctionPVP.team").get(0).value().equals(t.getName())){
+                    if (p.hasMetadata("junctionPVP.team") && p.getMetadata("JunctionPVP.team").get(0).value().equals(t.getName())) {
                         p.sendMessage(t.getColor() + "Please welcome " + event.getPlayer().getName() + "to your team!");
                     }
                 }
@@ -88,6 +92,7 @@ public class JunctionPVPListener implements Listener {
             }
         }
     }
+
     /*
     * onMobSpawnEvent
     * Double mobs iff in pvp region
@@ -119,6 +124,7 @@ public class JunctionPVPListener implements Listener {
             }
         }
     }
+
     /*
     * onEntityDeathEvent
     * Add points to teams on player deaths
@@ -126,17 +132,16 @@ public class JunctionPVPListener implements Listener {
      */
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityDeathEvent(EntityDeathEvent event) {
-        if (event.getEntity() instanceof Player){
+        if (event.getEntity() instanceof Player) {
             Player killer = event.getEntity().getKiller();
             //Not killed by player, return
             if (killer == null) return;
             //If they aren't on the same team, add a point ot the killer's team
             if (!event.getEntity().getMetadata("JunctionPVP.team").get(0).value()
-                    .equals(killer.getMetadata("JunctionPVP.team").get(0).value())){
+                    .equals(killer.getMetadata("JunctionPVP.team").get(0).value())) {
                 plugin.teams.get(killer.getMetadata("JunctionPVP.team").get(0).value()).addPoint();
             }
-        }
-        else if (plugin.isPvpRegion(event.getEntity().getLocation())) {
+        } else if (plugin.isPvpRegion(event.getEntity().getLocation())) {
             if (hostileEntities.contains(event.getEntityType())) {
                 if (event.getEntity().hasMetadata("JunctionPVP.spawn")) {
                     //Double EXP
@@ -148,6 +153,7 @@ public class JunctionPVPListener implements Listener {
             }
         }
     }
+
     /*
     * onEntityDamageByEntityEvent
     * If players are on the same team and team has friendly fire disabled, cancel damage
@@ -160,7 +166,7 @@ public class JunctionPVPListener implements Listener {
                 Player entity = (Player) event.getEntity();
                 //If players are on the same team
                 if (damager.getMetadata("JunctionPVP.team").get(0).value()
-                        .equals(entity.getMetadata("JunctionPVP.team").get(0).value())){
+                        .equals(entity.getMetadata("JunctionPVP.team").get(0).value())) {
                     //return iff friendly fire is enabled
                     if (plugin.teams.get(damager.getMetadata("JunctionPVP.team").get(0).value()).isFriendlyFire())
                         return;
@@ -178,10 +184,60 @@ public class JunctionPVPListener implements Listener {
      */
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerJoin(PlayerJoinEvent event) {
-        for (Team t : plugin.teams.values()){
-            if (t.containsPlayer(event.getPlayer().getName())){
+        for (Team t : plugin.teams.values()) {
+            if (t.containsPlayer(event.getPlayer().getName())) {
                 event.getPlayer().setMetadata("JunctionPVP.team", new FixedMetadataValue(plugin, t.getName()));
                 return;
+            }
+        }
+    }
+
+    /*
+    * Used for team swapping
+     */
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onBlockPlaceEvent(BlockPlaceEvent event) {
+        if (event.getBlockPlaced().getType().equals(Material.DIAMOND_BLOCK)) {
+            if (!event.getPlayer().hasMetadata("JunctionPVP.team")){
+                event.setCancelled(true);
+                event.getPlayer().sendMessage(ChatColor.RED + "You must join a team first, go back to spawn");
+                return;
+            }
+            for (Team t : plugin.teams.values()) {
+                Location teamJoinLoc = t.getJoinLocation();
+                Location blockPlacedLocation = event.getBlockPlaced().getLocation();
+                if ((teamJoinLoc.getWorld().getName().equals(blockPlacedLocation.getWorld())
+                        && (teamJoinLoc.getBlockY() == blockPlacedLocation.getBlockY())
+                        && (teamJoinLoc.getBlockY() == blockPlacedLocation.getBlockY())
+                        && (teamJoinLoc.getBlockZ() == blockPlacedLocation.getBlockZ()))){
+
+                    //Same Block, Swap Teams
+                    if (t.containsPlayer(event.getPlayer().getName())){
+                        event.setCancelled(true);
+                        event.getPlayer().sendMessage(ChatColor.RED + "You're already on that team!");
+                    } else {
+                        if (plugin.lowestScoreTeam().equals(t)){
+                            //Give them their block back
+                            event.getPlayer().getInventory().addItem(new ItemStack(Material.DIAMOND_BLOCK));
+                        }
+                        //Swap Team
+                        try {
+                            plugin.teams.get(event.getPlayer().getMetadata("JunctionPVP.team").get(0).value()).removePlayer(event.getPlayer().getName());
+                            t.addPlayer(event.getPlayer().getName());
+                            event.getPlayer().removeMetadata("JunctionPVP.team", plugin);
+                            event.getPlayer().setMetadata("JunctionPVP.team", new FixedMetadataValue(plugin, "JunctionPVP.team"));
+                        } catch (Exception e){
+                            //Checked earlier, shouldn't happen ever
+                            plugin.getLogger().severe("You broke the universe");
+                        }
+
+
+                        //Finally, remove the block (replace with air)
+                        event.getBlockPlaced().setType(Material.AIR);
+
+                    }
+
+                }
             }
         }
     }

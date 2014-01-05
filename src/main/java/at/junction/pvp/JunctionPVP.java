@@ -162,5 +162,22 @@ public class JunctionPVP  extends JavaPlugin{
         if (!config.DEBUG) return;
         getLogger().info(message);
     }
+    /*
+    * Returns the team object with the lowest score
+    * If its tied, returns a new blank team with a null name
+     */
+    public Team lowestScoreTeam(){
+        int lowScore = Integer.MAX_VALUE;
+        Team lowTeam = new Team(this, null);
+        for (Team t : teams.values()){
+            if (t.getScore() < lowScore){
+                lowScore = t.getScore();
+                lowTeam = t;
+            }
+            if (t.getScore() == lowScore)
+                return new Team(this, null);
+        }
+       return lowTeam;
+    }
 
 }
