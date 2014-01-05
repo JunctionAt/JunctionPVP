@@ -229,7 +229,8 @@ public class JunctionPVPListener implements Listener {
                     } else {
                         if (t.equals(plugin.lowestScoreTeam())){
                             //Give them their block back
-                            event.getPlayer().getInventory().addItem(new ItemStack(Material.DIAMOND_BLOCK));
+                            event.setCancelled(true);
+                            event.getPlayer().sendMessage(String.format("%sThis team swap was free, as %s is losing!", t.getColor(), t.getName()));
                         }
                         //Swap Team
                         try {
