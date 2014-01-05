@@ -28,7 +28,7 @@ import java.util.*;
 
 
 public class JunctionPVPListener implements Listener {
-    private final JunctionPVP plugin;
+    final JunctionPVP plugin;
     //Semaphore for mob spawning - if true, mob will spawn without firing EntitySpawnEvent
     private boolean _MOB_SPAWN = false;
     //Equipment/Weapon for spawned mobs
@@ -272,19 +272,20 @@ public class JunctionPVPListener implements Listener {
        }
     }
     //Used for PvP Cooldowns
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.MONITOR)
     private void onPVPDamage(DisallowedPVPEvent event){
         Player defender = event.getDefender();
         Player attacker = event.getAttacker();
+        plugin.debugLogger(String.format("pvp event: %s hit %s", attacker.getName(), defender.getName()));
         Collection<Player> players = pvpTimes.values();
-        if (players.contains(defender.getName()) || players.contains(attacker.getName())){
+        if (players.contains(defender.getName())){
             int defendKey = new Random().nextInt();
             int attackKey = new Random().nextInt();
             pvpTimes.put(defendKey, defender);
             pvpTimes.put(attackKey, attacker);
             plugin.getServer().getScheduler().runTaskLater(plugin, new pvpCooldownRemoveTask(this, attackKey), plugin.config.PVP_COOLDOWN_TICKS);
             plugin.getServer().getScheduler().runTaskLater(plugin, new pvpCooldownRemoveTask(this, defendKey), plugin.config.PVP_COOLDOWN_TICKS);
-
+            plugin.debugLogger(String.format("event cancelled, pvp allowed"));
             event.setCancelled(true);
         }
     }

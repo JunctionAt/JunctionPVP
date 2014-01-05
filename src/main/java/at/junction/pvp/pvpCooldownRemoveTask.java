@@ -13,8 +13,10 @@ public class pvpCooldownRemoveTask extends BukkitRunnable {
 
     public void run(){
         if (listener.pvpTimes.containsKey(key)){
+            listener.plugin.debugLogger(String.format("Cooldown Expired for %s", listener.pvpTimes.get(key)));
             listener.pvpTimes.remove(key);
         }
+
 
     }
 }
