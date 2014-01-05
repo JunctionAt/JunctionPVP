@@ -1,7 +1,7 @@
 debug: false
 teamNames: Red, Blue, Orange
 pvpRegionName: pvp
-pvpCooldownt: 30
+pvpCooldown: 30
 Red:
   score: 0
   color: RED

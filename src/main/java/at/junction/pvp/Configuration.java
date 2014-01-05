@@ -20,7 +20,7 @@ public class Configuration {
         TEAM_NAMES = plugin.getConfig().getStringList("teamNames");
         PVP_REGION = plugin.getConfig().getString("pvpRegionName");
         DEBUG = plugin.getConfig().getBoolean("debug");
-        PVP_COOLDOWN_TICKS = plugin.getConfig().getInt("pvpCooldown") * 20;
+        PVP_COOLDOWN_TICKS = plugin.getConfig().getInt("pvpCooldown", 30) * 20;
     }
     public void load(){
         plugin.reloadConfig();
