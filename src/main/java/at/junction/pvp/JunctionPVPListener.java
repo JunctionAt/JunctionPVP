@@ -198,6 +198,7 @@ public class JunctionPVPListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onBlockPlaceEvent(BlockPlaceEvent event) {
         if (event.getBlockPlaced().getType().equals(Material.DIAMOND_BLOCK)) {
+            plugin.debugLogger(String.format("%s placed DIAMOND_BLOCK", event.getPlayer().getName()));
             if (!event.getPlayer().hasMetadata("JunctionPVP.team")){
                 event.setCancelled(true);
                 event.getPlayer().sendMessage(ChatColor.RED + "You must join a team first, go back to spawn");
