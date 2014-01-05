@@ -69,7 +69,7 @@ Commands:
 
     /forceteam <player> <newteam>: force a player to join a team. Perm: junctionpvp.forceteam
     
-    (NYI) /addpoint <team> \[<value>\]: adds points to a team. Defaults to 1, value is optional. Perm: junctionpvp.addpoint
+    (NYI) /addpoint <team> [<value>]: adds points to a team. Defaults to 1, value is optional. Perm: junctionpvp.addpoint
 
 
 

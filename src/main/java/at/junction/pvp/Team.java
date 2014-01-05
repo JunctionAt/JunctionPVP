@@ -4,6 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.kitteh.tag.TagAPI;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -101,6 +102,7 @@ public class Team {
                 p.sendMessage(String.format("%sWelcome %s to the %s team!", this.getColor(), playerName, this.getName()));
             }
         }
+        TagAPI.refreshPlayer(plugin.getServer().getPlayer(playerName));
 
     }
 
