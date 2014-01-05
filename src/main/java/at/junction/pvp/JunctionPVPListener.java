@@ -141,6 +141,9 @@ public class JunctionPVPListener implements Listener {
             Player killer = event.getEntity().getKiller();
             //Not killed by player, return
             if (killer == null) return;
+            //Remove player pvp cooldown on death
+            if (pvpTimes.values().contains(event.getEntity()))
+                pvpTimes.values().removeAll(Collections.singleton(event.getEntity()));
             //If they aren't on the same team, add a point ot the killer's team
             if (!event.getEntity().getMetadata("JunctionPVP.team").get(0).value()
                     .equals(killer.getMetadata("JunctionPVP.team").get(0).value())) {
