@@ -1,6 +1,7 @@
 package at.junction.pvp;
 
 
+import com.sk89q.worldguard.protection.events.DisallowedPVPEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Creeper;
@@ -23,8 +24,7 @@ import org.bukkit.Material;
 import org.kitteh.tag.PlayerReceiveNameTagEvent;
 import org.kitteh.tag.TagAPI;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 
 public class JunctionPVPListener implements Listener {
@@ -35,6 +35,7 @@ public class JunctionPVPListener implements Listener {
     private ItemStack[] _EQUIPMENT;
     private ItemStack _WEAPON;
     private ArrayList<EntityType> hostileEntities = new ArrayList<EntityType>();
+    Map<Integer, Player> pvpTimes;
 
     public JunctionPVPListener(JunctionPVP plugin) {
         this.plugin = plugin;
@@ -44,6 +45,7 @@ public class JunctionPVPListener implements Listener {
         hostileEntities.add(EntityType.SKELETON);
         hostileEntities.add(EntityType.WITCH);
         hostileEntities.add(EntityType.SPIDER);
+        pvpTimes = new HashMap<>();
     }
 
     /*
@@ -177,6 +179,15 @@ public class JunctionPVPListener implements Listener {
                     //Cancel event - FriendlyFire is disabled, players are on the same team
                     event.setCancelled(true);
                     damager.sendMessage("Friendly Fire is disabled!");
+                //Seperate teams, add event to cooldown
+                } else {
+                    int damagerKey = new Random().nextInt();
+                    int entityKey = new Random().nextInt();
+                    pvpTimes.put(damagerKey, (Player)event.getDamager());
+                    pvpTimes.put(entityKey, (Player)event.getEntity());
+                    plugin.getServer().getScheduler().runTaskLater(plugin, new pvpCooldownRemoveTask(this, damagerKey), plugin.config.PVP_COOLDOWN_TICKS);
+                    plugin.getServer().getScheduler().runTaskLater(plugin, new pvpCooldownRemoveTask(this, entityKey), plugin.config.PVP_COOLDOWN_TICKS);
+
                 }
             }
         }
@@ -259,6 +270,23 @@ public class JunctionPVPListener implements Listener {
            event.setTag(plugin.teams.get(event.getNamedPlayer().getMetadata("JunctionPVP.team").get(0).value()).getColor()
            + event.getNamedPlayer().getName());
        }
+    }
+    //Used for PvP Cooldowns
+    @EventHandler(priority = EventPriority.LOWEST)
+    private void onPVPDamage(DisallowedPVPEvent event){
+        Player defender = event.getDefender();
+        Player attacker = event.getAttacker();
+        Collection<Player> players = pvpTimes.values();
+        if (players.contains(defender.getName()) || players.contains(attacker.getName())){
+            int defendKey = new Random().nextInt();
+            int attackKey = new Random().nextInt();
+            pvpTimes.put(defendKey, defender);
+            pvpTimes.put(attackKey, attacker);
+            plugin.getServer().getScheduler().runTaskLater(plugin, new pvpCooldownRemoveTask(this, attackKey), plugin.config.PVP_COOLDOWN_TICKS);
+            plugin.getServer().getScheduler().runTaskLater(plugin, new pvpCooldownRemoveTask(this, defendKey), plugin.config.PVP_COOLDOWN_TICKS);
+
+            event.setCancelled(true);
+        }
     }
 }
 

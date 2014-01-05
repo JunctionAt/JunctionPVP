@@ -13,11 +13,14 @@ public class Configuration {
     public final String PVP_REGION;
     public final boolean DEBUG;
 
+    public final int PVP_COOLDOWN_TICKS;
+
     public Configuration(JunctionPVP plugin){
         this.plugin = plugin;
         TEAM_NAMES = plugin.getConfig().getStringList("teamNames");
         PVP_REGION = plugin.getConfig().getString("pvpRegionName");
         DEBUG = plugin.getConfig().getBoolean("debug");
+        PVP_COOLDOWN_TICKS = plugin.getConfig().getInt("pvpCooldown") * 20;
     }
     public void load(){
         plugin.reloadConfig();

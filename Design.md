@@ -6,7 +6,7 @@ Teams:
     
     Team stores list of players, as well as methods for adding/removing members, a chat color, and a score
     
-    (NYI) Players team is shown in the PvP zone using their nameplate color. Use scoreboards.
+    Players team is shown in the PvP zone using their nameplate color. Uses TagAPI.
 
 
 How to tell what team a player is on:
@@ -30,15 +30,13 @@ Joining Teams:
 
     First join is used by stepping into portals at spawn
 
-    (NYI) Subsequent joins require the player to place a diamond block at the team they wish to joins spawn
+    Subsequent joins require the player to place a diamond block at the team they wish to joins spawn
     
-        (NYI) Switching teams costs one diamond block.
+        Switching teams costs one diamond block.
+
+        If you switch to a losing team (one that has less points), you will recieve your block back.
         
-            (NYI) Using BlockPlaceEvent @ coords
-            
-        (NYI) If you switch to a losing team (one that has less points), you will recieve your block back.
-        
-            (NYI) BlockPlaceEvent.setCancelled(true)
+
 
 
 PvP Timer:
