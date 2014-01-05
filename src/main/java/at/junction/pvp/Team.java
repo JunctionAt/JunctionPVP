@@ -8,12 +8,13 @@ import org.kitteh.tag.TagAPI;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashSet;
 
 
 public class Team {
     private final JunctionPVP plugin;
     private final String name;
-    private final List<OfflinePlayer> players;
+    private final HashSet<OfflinePlayer> players;
 
     private int score;
 
@@ -28,7 +29,7 @@ public class Team {
     public Team(JunctionPVP plugin, String name){
         this.plugin = plugin;
         this.name = name;
-        players = new ArrayList<OfflinePlayer>();
+        players = new HashSet<OfflinePlayer>();
         for (String player : plugin.getConfig().getStringList(name + ".players")){
             players.add(getOfflinePlayer(player));
         }
@@ -92,7 +93,6 @@ public class Team {
     }
 
     public void addPlayer(String playerName) throws Exception{
-        if (containsPlayer(playerName)) throw new Exception("Player exists already on that team");
         players.add(getOfflinePlayer(playerName));
 
         plugin.getServer().getPlayer(playerName).teleport(joinLocation);
