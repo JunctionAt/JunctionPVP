@@ -49,8 +49,14 @@ public class JunctionPVPListener implements Listener {
      */
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerMoveEvent(PlayerMoveEvent event) {
-        //Player is on a team, we don't care where they are
-        if (event.getPlayer().hasMetadata("JunctionPVP.team")) return;
+        //Player is on a team, we ONLY care if they're going through their portal
+        if (event.getPlayer().hasMetadata("JunctionPVP.team")){
+            Team t = plugin.teams.get(event.getPlayer().getMetadata("JunctionPVP.team").get(0).value());
+            if (t.isPortalLocation(event.getTo())){
+                event.getPlayer().teleport(t.getJoinLocation());
+            }
+            return;
+        }
 
         for (Team t : plugin.teams.values()) {
             if (t.isPortalLocation(event.getTo())) {
@@ -90,7 +96,6 @@ public class JunctionPVPListener implements Listener {
                 event.setRespawnLocation(plugin.teams.get(event.getPlayer().getMetadata("JunctionPVP.team").get(0).value()).getJoinLocation());
                 event.getPlayer().sendMessage("You can only spawn in a bed in your team's region. Back to your team's spawn with you...");
             }
-        }
     }
 
     /*
