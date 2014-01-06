@@ -4,7 +4,7 @@ package at.junction.pvp;
 
 import java.util.List;
 
-public class Configuration {
+class Configuration {
     private final JunctionPVP plugin;
     //List of team names
     public final List<String> TEAM_NAMES;
@@ -24,8 +24,5 @@ public class Configuration {
     }
     public void load(){
         plugin.reloadConfig();
-    }
-
-    public void save(){
     }
 }

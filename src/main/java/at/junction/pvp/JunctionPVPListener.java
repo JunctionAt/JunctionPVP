@@ -27,6 +27,7 @@ import org.kitteh.tag.TagAPI;
 import java.util.*;
 
 
+@SuppressWarnings("WeakerAccess")
 public class JunctionPVPListener implements Listener {
     final JunctionPVP plugin;
     //Semaphore for mob spawning - if true, mob will spawn without firing EntitySpawnEvent
@@ -34,7 +35,7 @@ public class JunctionPVPListener implements Listener {
     //Equipment/Weapon for spawned mobs
     private ItemStack[] _EQUIPMENT;
     private ItemStack _WEAPON;
-    private ArrayList<EntityType> hostileEntities = new ArrayList<>();
+    private final ArrayList<EntityType> hostileEntities = new ArrayList<>();
 
     public JunctionPVPListener(JunctionPVP plugin) {
         this.plugin = plugin;
@@ -232,6 +233,7 @@ public class JunctionPVPListener implements Listener {
                                 e.printStackTrace();
                             }
                             //Reset player inventory, so they see the item again
+                            //noinspection deprecation
                             event.getPlayer().updateInventory();
                             //Finally, remove the block (replace with air)
                             event.getBlockPlaced().setType(Material.AIR);

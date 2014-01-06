@@ -12,8 +12,8 @@ import java.util.Random;
 import java.util.Collections;
 
 class Util {
-    private JunctionPVP plugin;
-    private Map<Integer, Player> pvpCooldownMap;
+    private final JunctionPVP plugin;
+    private final Map<Integer, Player> pvpCooldownMap;
 
     Util(JunctionPVP plugin){
         this.plugin = plugin;
@@ -38,6 +38,7 @@ class Util {
     * isTeamRegion(Team t, Location location)
     * return true if location is inside team's region
      */
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     boolean isTeamRegion(Team t, Location location){
         ProtectedRegion teamRegion = plugin.wg.getRegionManager(location.getWorld()).getRegion(t.getRegionName());
         boolean inRegion = false;
@@ -92,6 +93,7 @@ class Util {
     * Returns true if players are on the same team
      */
     boolean sameTeam(Player one, Player two){
+        //noinspection SimplifiableIfStatement
         if (one.hasMetadata("JunctionPVP.team") && two.hasMetadata("JunctionPVP.team"))
             return (one.getMetadata("JunctionPVP.team").get(0).value().equals(two.getMetadata("JunctionPVP.team").get(0).value()));
         return false;

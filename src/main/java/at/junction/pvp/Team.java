@@ -11,10 +11,10 @@ import java.util.List;
 import java.util.HashSet;
 
 
-public class Team {
+class Team {
     private final JunctionPVP plugin;
     private final List<Location> portalLocation;
-    private HashSet<OfflinePlayer> players;
+    private final HashSet<OfflinePlayer> players;
 
     private final String name;
     public String getName(){
@@ -32,6 +32,7 @@ public class Team {
     }
 
     private final boolean friendlyFire;
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean getFriendlyFire() {
         return friendlyFire;
     }

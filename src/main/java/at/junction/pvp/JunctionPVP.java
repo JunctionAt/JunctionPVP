@@ -12,6 +12,7 @@ import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import java.io.File;
 import java.util.HashMap;
 
+@SuppressWarnings("WeakerAccess")
 public class JunctionPVP  extends JavaPlugin{
     Configuration config;
     Util util;
@@ -59,7 +60,6 @@ public class JunctionPVP  extends JavaPlugin{
         if (!loadError){
             for (Team team : teams.values())
                 team.saveTeam();
-            config.save();
             this.saveConfig();
         }
         getLogger().info("JunctionPVP Disabled");
@@ -99,9 +99,9 @@ public class JunctionPVP  extends JavaPlugin{
             //Remove player from team objects
             //Doesn't use util.getTeam(), as it won't work on offlinePlayers
             for (Team t : teams.values()){
-                if (t.containsPlayer(args[0])){
+                if (t.containsPlayer(playerName)){
                     try {
-                        t.removePlayer(args[0]);
+                        t.removePlayer(playerName);
                         break;
                     } catch (Exception e){
                         //do nothing, won't happen

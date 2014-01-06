@@ -5,10 +5,10 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Map;
 
-public class pvpCooldownRemoveTask extends BukkitRunnable {
+class pvpCooldownRemoveTask extends BukkitRunnable {
 
-    int key;
-    Map<Integer, Player> cooldownMap;
+    private final int key;
+    private final Map<Integer, Player> cooldownMap;
     public pvpCooldownRemoveTask(int key, Map<Integer, Player> cooldownMap){
         this.key = key;
         this.cooldownMap = cooldownMap;

@@ -22,7 +22,7 @@ PVP:
 
     Requires WorldGuard flag 'pvp' to be set to allow for pvp regions.
     
-    Friendly Fire can be disabled/enabled per team. Only effects PVP region (ie, arenas will work elsehwere)
+    Friendly Fire can be disabled/enabled per team. Only effects PVP region (ie, arenas will work elsewhere)
 
 Joining Teams:
 
@@ -34,7 +34,7 @@ Joining Teams:
     
         Switching teams costs one diamond block.
 
-        If you switch to a losing team (one that has less points), you will recieve your block back.
+        If you switch to a losing team (one that has less points), you will receive your block back.
         
 
 
@@ -63,9 +63,11 @@ Commands:
 
     /teams: list teams. Perm: junctionpvp.teams.
 
-    /forceteam <player> <newteam>: force a player to join a team. Perm: junctionpvp.forceteam
+    /team-set <player> <newteam>: force a player to join a team. Perm: junctionpvp.team.add
+
+    /team-remove [<player>]: remove player from team. Can use on self without arguments. Perm: junction.pvp.team.remove
     
-    (NYI) /addpoint <team> [<value>]: adds points to a team. Defaults to 1, value is optional. Perm: junctionpvp.addpoint
+    /addpoint <team> [<value>]: adds points to a team. Defaults to 1, value is optional. Use negative numbers to deduct points if needed. Perm: junctionpvp.team.points
 
 
 
