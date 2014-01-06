@@ -1,22 +1,22 @@
 package at.junction.pvp;
 
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.Map;
 
 public class pvpCooldownRemoveTask extends BukkitRunnable {
 
-    JunctionPVPListener listener;
     int key;
-    public pvpCooldownRemoveTask(JunctionPVPListener listener, int key){
-        this.listener = listener;
+    Map<Integer, Player> cooldownMap;
+    public pvpCooldownRemoveTask(int key, Map<Integer, Player> cooldownMap){
         this.key = key;
+        this.cooldownMap = cooldownMap;
     }
 
     public void run(){
-        if (listener.pvpTimes.containsKey(key)){
-            listener.plugin.debugLogger(String.format("Cooldown Expired for %s", listener.pvpTimes.get(key)));
-            listener.pvpTimes.remove(key);
+        if (cooldownMap.containsKey(key)){
+            cooldownMap.remove(key);
         }
-
-
     }
 }

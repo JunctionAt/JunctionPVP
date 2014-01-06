@@ -41,11 +41,9 @@ Joining Teams:
 
 PvP Timer:
 
-    (NYI) Override PvP using WorldGuard API
+    Override PvP using WorldGuard API
     
-        (NYI) 30s PvP disabled upon entering pvp zone
-        
-        (NYI) 30s PvP enabled after last PvP action and leaving zone
+        30s PvP enabled after last PvP action
 
 Beds:
 

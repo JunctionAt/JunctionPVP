@@ -13,23 +13,22 @@ commands:
     description: View a list of teams, online team members, and scores.
     permission: junction.pvp.teams
     usage: /teams
-  forceteam:
+  team-set:
     description: Force a player to a given team
-    permission: junction.pvp.team.add
-    usage: /forceteam player teamname
-  removeteam:
+    permission: junction.pvp.team.set
+    usage: /team-set player teamname
+  team-remove:
     description: Removes a player from any assigned teams
     permission: junction.pvp.team.remove
-    usage: /removeteam player
-  printteam:
+    usage: /team-remove player
+  team-print:
     description: Print team info
     permission: junction.pvp.team.print
-    usage: /printteam
-  printmetadata:
-    description: Prints player's metadata
-    usage: /printmetadata <player>
-    permission: junctoin.pvp.player.metadata
-
+    usage: /team-print
+  team-addpoint:
+    description: Adds point(s) to a team. Use negatives to remove points.
+    permission: junction.pvp.team.points
+    usage: /team-addpoint [<value>]
 permissions:
   junction.pvp.teams:
     description: Allows a player to list teams
@@ -38,8 +37,8 @@ permissions:
     description: tech/debug access
     default: op
     children:
-      junction.pvp.team.add:
-        description: Add player to team
+      junction.pvp.team.set:
+        description: Set player's team
         default: op
       junction.pvp.team.remove:
         description: Remove player from team
@@ -47,6 +46,7 @@ permissions:
       junction.pvp.team.print:
         description: Print team info to console
         default: op
-      junction.pvp.player.metadata:
-        description: Print player metadata
-        default: op
+  junction.pvp.team.points:
+    description: Allows changing points of teams
+    default: op
+

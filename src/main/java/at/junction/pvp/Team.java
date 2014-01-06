@@ -13,74 +13,68 @@ import java.util.HashSet;
 
 public class Team {
     private final JunctionPVP plugin;
-    private final String name;
-    private final HashSet<OfflinePlayer> players;
-
-    private int score;
-
-    private final ChatColor color;
-    private final boolean friendlyFire;
-
-    private final Location joinLocation;
     private final List<Location> portalLocation;
+    private HashSet<OfflinePlayer> players;
 
-    private final String regionName;
-
-    public Team(JunctionPVP plugin, String name){
-        this.plugin = plugin;
-        this.name = name;
-        players = new HashSet<OfflinePlayer>();
-        for (String player : plugin.getConfig().getStringList(name + ".players")){
-            players.add(getOfflinePlayer(player));
-        }
-        score = plugin.getConfig().getInt(name + ".score");
-        color =  ChatColor.valueOf(plugin.getConfig().getString(name + ".color"));
-        friendlyFire = plugin.getConfig().getBoolean(name + ".friendlyFire");
-        joinLocation = getLocation(plugin.getConfig().getString(name+".joinLocation"));
-        List<String> portalCoords = plugin.getConfig().getStringList(name+".portalLocation");
-        portalLocation = new ArrayList<Location>();
-        for (String coord : portalCoords){
-            Location temp = getLocation(coord);
-            if (temp != null)
-                portalLocation.add(temp);
-        }
-
-        regionName = plugin.getConfig().getString(name + ".regionName");
-
-    }
-
+    private final String name;
     public String getName(){
         return name;
     }
 
-    public ChatColor getColor() {
-        return color;
-    }
-
-    public boolean isFriendlyFire() {
-        return friendlyFire;
-    }
-
-    public Location getJoinLocation() {
-        return joinLocation;
-    }
-
+    private int score;
     public int getScore() {
         return score;
     }
 
+    private final ChatColor color;
+    public ChatColor getColor() {
+        return color;
+    }
+
+    private final boolean friendlyFire;
+    public boolean getFriendlyFire() {
+        return friendlyFire;
+    }
+
+    private final Location joinLocation;
+    public Location getJoinLocation() {
+        return joinLocation;
+    }
+
+
+
+    private final String regionName;
     public String getRegionName() {
         return regionName;
     }
 
 
+
+    public Team(JunctionPVP plugin, String name){
+        this.plugin = plugin;
+        this.name = name;
+        this.score = plugin.getConfig().getInt(name + ".score");
+        this.color =  ChatColor.valueOf(plugin.getConfig().getString(name + ".color"));
+        this.friendlyFire = plugin.getConfig().getBoolean(name + ".friendlyFire");
+        this.joinLocation = getLocation(plugin.getConfig().getString(name+".joinLocation"));
+        this.regionName = plugin.getConfig().getString(name + ".regionName");
+
+        List<String> portalCoords = plugin.getConfig().getStringList(name+".portalLocation");
+        portalLocation = new ArrayList<>();
+        for (String coord : portalCoords){
+            Location temp = getLocation(coord);
+            if (temp != null)
+                this.portalLocation.add(temp);
+        }
+        this.players = new HashSet<>();
+        for (String player : plugin.getConfig().getStringList(name + ".players")){
+            this.players.add(plugin.util.getOfflinePlayer(player));
+        }
+    }
+
     public boolean isPortalLocation(Location loc){
         for (Location l: portalLocation){
-            if ((l.getWorld().getName().equals(loc.getWorld().getName())) &&
-                    (l.getBlockX() == loc.getBlockX()) &&
-                    (l.getBlockY() == loc.getBlockY()) &&
-                    (l.getBlockZ() == loc.getBlockZ())){
-                plugin.debugLogger(String.format("enetered %s spawn portal", name));
+            if (plugin.util.blockEquals(l, loc)){
                 return true;
             }
         }
@@ -88,12 +82,13 @@ public class Team {
     }
 
     public boolean containsPlayer(String playerName){
-        return players.contains(getOfflinePlayer(playerName));
-
+        return players.contains(plugin.util.getOfflinePlayer(playerName));
     }
 
     public void addPlayer(String playerName) throws Exception{
-        players.add(getOfflinePlayer(playerName));
+        if (this.containsPlayer(playerName)) throw new Exception("Player is already on this team");
+
+        players.add(plugin.util.getOfflinePlayer(playerName));
 
         plugin.getServer().getPlayer(playerName).teleport(joinLocation);
 
@@ -108,7 +103,7 @@ public class Team {
 
     public void removePlayer(String playerName) throws Exception{
         if (!containsPlayer(playerName)) throw new Exception("Player is not on that team");
-        players.remove(getOfflinePlayer(playerName));
+        players.remove(plugin.util.getOfflinePlayer(playerName));
 
         for (Player p : plugin.getServer().getOnlinePlayers()){
             if (this.containsPlayer(p.getName())){
@@ -120,15 +115,15 @@ public class Team {
     * Add single or multiple points to a team
      */
     public void addPoint(Integer... amount) {
-
         if (amount.length == 0) {
-            plugin.debugLogger(String.format("%s scored a point", name));
+            plugin.util.debugLogger(String.format("%s scored a point", name));
             score++;
         } else if (amount.length == 1){
-            plugin.debugLogger(String.format("%s scored %s points", name, amount[0].toString()));
+            plugin.util.debugLogger(String.format("%s scored %s points", name, amount[0].toString()));
             score+= amount[0];
         }
     }
+
     /*
     * Returns list of players as 'player1, player2, player3'
      */
@@ -157,11 +152,6 @@ public class Team {
 
     }
 
-    //Returns an offlinePlayer from a playername
-    private OfflinePlayer getOfflinePlayer(String playerName){
-        return plugin.getServer().getOfflinePlayer(playerName);
-    }
-
     //Returns a location given world,x,y,z
     private Location getLocation(String in){
         String[] loc = in.split(",");
@@ -173,6 +163,7 @@ public class Team {
 
     }
 
+    //Prints out teamdata. Debugging stuff. Use with /printteam.
     public String toString(){
         StringBuilder data = new StringBuilder();
         data.append(color).append(name);
@@ -206,8 +197,8 @@ public class Team {
         return data.toString();
     }
 
+    //Override equality - if team names are the same, teams are the same.
     public boolean equals(Team t){
-        if (t == null) return false;
-        return name.equals(t.getName());
+        return t != null && name.equals(t.getName());
     }
 }
