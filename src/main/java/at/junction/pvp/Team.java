@@ -95,7 +95,7 @@ class Team {
 
         for (Player p : plugin.getServer().getOnlinePlayers()){
             if (this.containsPlayer(p.getName())){
-                p.sendMessage(String.format("%sWelcome %s to the %s team!", this.getColor(), playerName, this.getName()));
+                p.sendMessage(String.format("%sWelcome %s to the %s!", this.getColor(), playerName, this.getName()));
             }
         }
         TagAPI.refreshPlayer(plugin.getServer().getPlayer(playerName));
@@ -108,7 +108,7 @@ class Team {
 
         for (Player p : plugin.getServer().getOnlinePlayers()){
             if (this.containsPlayer(p.getName())){
-                p.sendMessage(String.format("%s%s has left the %s team :(", this.getColor(), playerName, this.getName()));
+                p.sendMessage(String.format("%s%s has left the %s :(", this.getColor(), playerName, this.getName()));
             }
         }
     }
