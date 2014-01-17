@@ -19,7 +19,6 @@ public class JunctionPVP  extends JavaPlugin{
     //Teams SHOULD BE teamName -> team
     HashMap<String, Team> teams;
     WorldGuardPlugin wg;
-    private boolean loadError = false;
 
     @Override
     public void onEnable(){
@@ -33,8 +32,7 @@ public class JunctionPVP  extends JavaPlugin{
         Plugin plugin = getServer().getPluginManager().getPlugin("WorldGuard");
         if ((plugin == null) || !(plugin instanceof WorldGuardPlugin)){
             getLogger().severe("Worldguard not detected. JunctionPVP unloading");
-            loadError = true;
-            getServer().getPluginManager().disablePlugin(this);
+            this.setEnabled(false);
             return;
         }
         wg = (WorldGuardPlugin) plugin;
@@ -57,11 +55,12 @@ public class JunctionPVP  extends JavaPlugin{
 
     @Override
     public void onDisable(){
-        if (!loadError){
-            for (Team team : teams.values())
-                team.saveTeam();
-            this.saveConfig();
-        }
+        config.load(); //reload config before we save it, so we don't lose data if anything changed
+        for (Team team : teams.values())
+            team.saveTeam();
+        this.saveConfig();
+
+
         getLogger().info("JunctionPVP Disabled");
     }
 
