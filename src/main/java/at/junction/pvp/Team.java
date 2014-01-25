@@ -1,10 +1,11 @@
 package at.junction.pvp;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
-import org.kitteh.tag.TagAPI;
+import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,7 @@ class Team {
     private final JunctionPVP plugin;
     private final List<Location> portalLocation;
     private final HashSet<OfflinePlayer> players;
+    private org.bukkit.scoreboard.Team team;
 
     private final String name;
     public String getName(){
@@ -60,6 +62,13 @@ class Team {
         this.joinLocation = getLocation(plugin.getConfig().getString(name+".joinLocation"));
         this.regionName = plugin.getConfig().getString(name + ".regionName");
 
+        //Scoreboard init & team prefix
+        Scoreboard sb = Bukkit.getScoreboardManager().getMainScoreboard();
+        if (sb.getTeam(name) == null) {
+            team = sb.registerNewTeam(name);
+            team.setPrefix(color + "");
+        }
+
         List<String> portalCoords = plugin.getConfig().getStringList(name+".portalLocation");
         portalLocation = new ArrayList<>();
         for (String coord : portalCoords){
@@ -98,7 +107,7 @@ class Team {
                 p.sendMessage(String.format("%sWelcome %s to the %s!", this.getColor(), playerName, this.getName()));
             }
         }
-        TagAPI.refreshPlayer(plugin.getServer().getPlayer(playerName));
+        team.addPlayer(plugin.getServer().getPlayer(playerName));
 
     }
 
@@ -111,6 +120,7 @@ class Team {
                 p.sendMessage(String.format("%s%s has left the %s :(", this.getColor(), playerName, this.getName()));
             }
         }
+        team.removePlayer(plugin.getServer().getPlayer(playerName));
     }
     /*
     * Add single or multiple points to a team

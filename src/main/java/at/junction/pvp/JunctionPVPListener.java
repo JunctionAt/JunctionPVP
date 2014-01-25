@@ -21,9 +21,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.Material;
 
-import org.kitteh.tag.PlayerReceiveNameTagEvent;
-import org.kitteh.tag.TagAPI;
-
 import java.util.*;
 
 
@@ -192,7 +189,6 @@ public class JunctionPVPListener implements Listener {
                 event.getPlayer().setMetadata("JunctionPVP.team", new FixedMetadataValue(plugin, t.getName()));
                 return;
             }
-            TagAPI.refreshPlayer(event.getPlayer());
         }
     }
 
@@ -242,14 +238,6 @@ public class JunctionPVPListener implements Listener {
                     }
                 }
             }
-        }
-    }
-
-    //Team colors - requires TagAPI
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void onNameTag(PlayerReceiveNameTagEvent event) {
-        if (event.getNamedPlayer().hasMetadata("JunctionPVP.team")) {
-            event.setTag(plugin.util.getTeam(event.getNamedPlayer()).getColor() + event.getNamedPlayer().getName());
         }
     }
 
