@@ -6,7 +6,6 @@ import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.metadata.MetadataValue;
 import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.ArrayList;
@@ -86,6 +85,7 @@ class Team {
         }
         this.players = new HashSet<>();
         for (String player : plugin.getConfig().getStringList(name + ".players")){
+            plugin.util.debugLogger(String.format("Adding %s to team %s", player, this.getName()));
             this.players.add(plugin.util.getOfflinePlayer(player));
         }
     }
