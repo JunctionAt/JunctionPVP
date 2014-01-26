@@ -3,7 +3,7 @@ version: 1.0-SNAPSHOT
 description: Junction PVP Plugin for Revision 2
 author: [zifnab06]
 website: http://github.com/junctionat/JunctionPVP
-depend: [TagAPI, WorldGuard]
+depend: [WorldGuard]
 
 main: at.junction.pvp.JunctionPVP
 database: false
