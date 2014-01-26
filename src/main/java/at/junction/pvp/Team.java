@@ -46,7 +46,7 @@ class Team {
 
     private final Location spawnLocation;
     public Location getSpawnLocation(){
-        return joinLocation;
+        return spawnLocation;
     }
 
 
