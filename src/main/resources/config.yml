@@ -9,6 +9,7 @@ Red:
   regionName: red
   players: []
   joinLocation: world,-10,75,0
+  spawnLocation: world,-10,75,0
   portalLocation: []
 Blue:
   score: 0
@@ -17,6 +18,7 @@ Blue:
   regionName: blue
   players: []
   joinLocation: world,10,75,0
+  spawnLocation: world,10,75,0
   portalLocation: []
 Orange:
   score: 0
@@ -25,4 +27,5 @@ Orange:
   regionName: orange
   players: []
   joinLocation: world,0,75,10
+  spawnLocation: world,0,75,10
   portalLocation: []
