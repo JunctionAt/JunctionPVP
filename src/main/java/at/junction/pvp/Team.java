@@ -5,6 +5,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.metadata.MetadataValue;
 import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.ArrayList;
@@ -113,6 +115,9 @@ class Team {
                 p.sendMessage(String.format("%sWelcome %s to the %s!", this.getColor(), playerName, this.getName()));
             }
         }
+
+        plugin.getServer().getPlayer(playerName).setMetadata("JunctionPVP.team", new FixedMetadataValue(plugin, getName()));
+
         team.addPlayer(plugin.getServer().getPlayer(playerName));
 
     }
