@@ -74,6 +74,8 @@ class Team {
         if (sb.getTeam(name) == null) {
             team = sb.registerNewTeam(name);
             team.setPrefix(color + "");
+        } else {
+            team = sb.getTeam(name);
         }
 
         List<String> portalCoords = plugin.getConfig().getStringList(name+".portalLocation");
