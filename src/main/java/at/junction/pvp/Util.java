@@ -2,7 +2,6 @@ package at.junction.pvp;
 
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
 
@@ -108,12 +107,12 @@ class Util {
         p.setMetadata("JunctionPVP.team", new FixedMetadataValue(plugin, t.getName()));
     }
 
-    /*
-    * Gives you an offlinePlayer for a playerName
-     */
-    OfflinePlayer getOfflinePlayer(String playerName){
-        return plugin.getServer().getOfflinePlayer(playerName);
-    }
+//    /*
+//    * Gives you an offlinePlayer for a playerName
+//     */
+//    OfflinePlayer getOfflinePlayer(String playerName){
+//        return plugin.getServer().getOfflinePlayer(playerName);
+//    }
 
     boolean blockEquals(Location one, Location two){
         return (one.getWorld().equals(two.getWorld()))

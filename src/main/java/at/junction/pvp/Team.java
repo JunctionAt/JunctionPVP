@@ -86,8 +86,8 @@ class Team {
         this.players = new HashSet<>();
         for (String player : plugin.getConfig().getStringList(name + ".players")){
             plugin.util.debugLogger(String.format("Adding %s to team %s", player, this.getName()));
-            this.players.add(plugin.util.getOfflinePlayer(player));
-            this.team.addPlayer(plugin.util.getOfflinePlayer(player));
+            this.players.add(plugin.getServer().getOfflinePlayer(player));
+            this.team.addPlayer(plugin.getServer().getOfflinePlayer(player));
         }
     }
 
@@ -101,13 +101,13 @@ class Team {
     }
 
     public boolean containsPlayer(String playerName){
-        return players.contains(plugin.util.getOfflinePlayer(playerName));
+        return players.contains(plugin.getServer().getOfflinePlayer(playerName));
     }
 
     public void addPlayer(String playerName) throws Exception{
         if (this.containsPlayer(playerName)) throw new Exception("Player is already on this team");
 
-        players.add(plugin.util.getOfflinePlayer(playerName));
+        players.add(plugin.getServer().getOfflinePlayer(playerName));
 
         plugin.getServer().getPlayer(playerName).teleport(spawnLocation);
 
@@ -119,22 +119,22 @@ class Team {
 
         plugin.getServer().getPlayer(playerName).setMetadata("JunctionPVP.team", new FixedMetadataValue(plugin, getName()));
 
-        if (!team.hasPlayer(plugin.util.getOfflinePlayer(playerName))){
-            team.addPlayer(plugin.util.getOfflinePlayer(playerName));
+        if (!team.hasPlayer(plugin.getServer().getOfflinePlayer(playerName))){
+            team.addPlayer(plugin.getServer().getOfflinePlayer(playerName));
         }
 
     }
 
     public void removePlayer(String playerName) throws Exception{
         if (!containsPlayer(playerName)) throw new Exception("Player is not on that team");
-        players.remove(plugin.util.getOfflinePlayer(playerName));
+        players.remove(plugin.getServer().getOfflinePlayer(playerName));
 
         for (Player p : plugin.getServer().getOnlinePlayers()){
             if (this.containsPlayer(p.getName())){
                 p.sendMessage(String.format("%s%s has left the %s :(", this.getColor(), playerName, this.getName()));
             }
         }
-        if (team.hasPlayer(plugin.util.getOfflinePlayer(playerName))){
+        if (team.hasPlayer(plugin.getServer().getOfflinePlayer(playerName))){
             team.removePlayer(plugin.getServer().getPlayer(playerName));
         }
     }
