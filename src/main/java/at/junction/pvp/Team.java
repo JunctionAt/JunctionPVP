@@ -44,6 +44,11 @@ class Team {
         return joinLocation;
     }
 
+    private final Location spawnLocation;
+    public Location getSpawnLocation(){
+        return joinLocation;
+    }
+
 
 
     private final String regionName;
@@ -59,7 +64,8 @@ class Team {
         this.score = plugin.getConfig().getInt(name + ".score");
         this.color =  ChatColor.valueOf(plugin.getConfig().getString(name + ".color"));
         this.friendlyFire = plugin.getConfig().getBoolean(name + ".friendlyFire");
-        this.joinLocation = getLocation(plugin.getConfig().getString(name+".joinLocation"));
+        this.joinLocation = getLocation(plugin.getConfig().getString(name + ".joinLocation"));
+        this.spawnLocation = getLocation(plugin.getConfig().getString(name+".spawnLocation"));
         this.regionName = plugin.getConfig().getString(name + ".regionName");
 
         //Scoreboard init & team prefix
@@ -100,7 +106,7 @@ class Team {
 
         players.add(plugin.util.getOfflinePlayer(playerName));
 
-        plugin.getServer().getPlayer(playerName).teleport(joinLocation);
+        plugin.getServer().getPlayer(playerName).teleport(spawnLocation);
 
         for (Player p : plugin.getServer().getOnlinePlayers()){
             if (this.containsPlayer(p.getName())){
@@ -196,6 +202,9 @@ class Team {
         data.append("\n");
 
         data.append("joinLocation: ").append(joinLocation);
+        data.append("\n");
+
+        data.append("spawnLocation: ").append(spawnLocation);
         data.append("\n");
 
         data.append("portal location: ");

@@ -54,7 +54,7 @@ public class JunctionPVPListener implements Listener {
         if (event.getPlayer().hasMetadata("JunctionPVP.team")) {
             Team t = plugin.util.getTeam(event.getPlayer());
             if (t.isPortalLocation(event.getTo())) {
-                event.getPlayer().teleport(t.getJoinLocation());
+                event.getPlayer().teleport(t.getSpawnLocation());
             }
             return;
         }
@@ -88,7 +88,7 @@ public class JunctionPVPListener implements Listener {
             //If player isn't in their team region, disable bed spawns
             if (!plugin.util.isTeamRegion(plugin.teams.get(plugin.util.getTeamName(event.getPlayer())), event.getRespawnLocation())) {
 
-                event.setRespawnLocation(plugin.util.getTeam(event.getPlayer()).getJoinLocation());
+                event.setRespawnLocation(plugin.util.getTeam(event.getPlayer()).getSpawnLocation());
                 event.getPlayer().sendMessage("You can only spawn in a bed in your team's region. Back to your team's spawn with you...");
             }
         }
