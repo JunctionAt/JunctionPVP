@@ -87,6 +87,7 @@ class Team {
         for (String player : plugin.getConfig().getStringList(name + ".players")){
             plugin.util.debugLogger(String.format("Adding %s to team %s", player, this.getName()));
             this.players.add(plugin.util.getOfflinePlayer(player));
+            this.team.addPlayer(plugin.util.getOfflinePlayer(player));
         }
     }
 
@@ -118,7 +119,9 @@ class Team {
 
         plugin.getServer().getPlayer(playerName).setMetadata("JunctionPVP.team", new FixedMetadataValue(plugin, getName()));
 
-        team.addPlayer(plugin.getServer().getPlayer(playerName));
+        if (!team.hasPlayer(plugin.util.getOfflinePlayer(playerName))){
+            team.addPlayer(plugin.util.getOfflinePlayer(playerName));
+        }
 
     }
 
@@ -131,7 +134,9 @@ class Team {
                 p.sendMessage(String.format("%s%s has left the %s :(", this.getColor(), playerName, this.getName()));
             }
         }
-        team.removePlayer(plugin.getServer().getPlayer(playerName));
+        if (team.hasPlayer(plugin.util.getOfflinePlayer(playerName))){
+            team.removePlayer(plugin.getServer().getPlayer(playerName));
+        }
     }
     /*
     * Add single or multiple points to a team
