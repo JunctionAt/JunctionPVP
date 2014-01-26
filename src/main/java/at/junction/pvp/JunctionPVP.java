@@ -141,8 +141,11 @@ public class JunctionPVP  extends JavaPlugin{
                 return true;
             }
 
-
-            sender.sendMessage("Team: " + player.getMetadata("JunctionPVP.team"));
+            if (player.hasMetadata("JunctionPVP.team")){
+                sender.sendMessage("Team: " + player.getMetadata("JunctionPVP.team").get(0).value());
+            } else {
+                sender.sendMessage("Team metadata missing");
+            }
         }
 
         return true;
