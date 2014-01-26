@@ -29,6 +29,10 @@ commands:
     description: Adds point(s) to a team. Use negatives to remove points.
     permission: junction.pvp.team.points
     usage: /team-addpoint [<value>]
+  player-printmetadata:
+    description: Prints relevant metadata
+    permission: junction.pvp.team.metadata
+    usage: /player-printmetadata <player>
 permissions:
   junction.pvp.teams:
     description: Allows a player to list teams
@@ -45,6 +49,9 @@ permissions:
         default: op
       junction.pvp.team.print:
         description: Print team info to console
+        default: op
+      junction.pvp.team.metadata:
+        description: Print relevant metadata
         default: op
   junction.pvp.team.points:
     description: Allows changing points of teams

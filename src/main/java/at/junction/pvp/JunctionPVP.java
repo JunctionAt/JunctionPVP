@@ -130,6 +130,19 @@ public class JunctionPVP  extends JavaPlugin{
             }
             teams.get(args[0]).addPoint(amount);
             sender.sendMessage("Done");
+        } else if (name.equalsIgnoreCase("player-printmetadata")){
+            if (args.length != 1){
+                sender.sendMessage(ChatColor.RED + "Usage: /player-printmetadata <player>");
+                return true;
+            }
+            Player player = getServer().getPlayer(args[0]);
+            if (player == null){
+                sender.sendMessage(ChatColor.RED + "Player doesns't exist");
+                return true;
+            }
+
+
+            sender.sendMessage("Team: " + player.getMetadata("JunctionPVP.team"));
         }
 
         return true;
