@@ -16,8 +16,8 @@
             </plugin>
         </plugins>
     </build>
-    <groupId>JunctionPVP</groupId>
-    <artifactId>at.junction.pvp</artifactId>
+    <groupId>at.junction.pvp</groupId>
+    <artifactId>JunctionPVP</artifactId>
     <version>1.0-SNAPSHOT</version>
     <repositories>
         <repository>
