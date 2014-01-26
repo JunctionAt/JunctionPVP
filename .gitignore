@@ -216,3 +216,7 @@ pip-log.txt
 
 #IntellijIDEA
 .idea
+*.iml
+
+#Maven
+target/
