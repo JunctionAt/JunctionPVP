@@ -86,6 +86,7 @@ class Team {
         this.players = new HashSet<>();
         for (String player : plugin.getConfig().getStringList(name + ".players")){
             plugin.util.debugLogger(String.format("Adding %s to team %s", player, this.getName()));
+            System.out.println(plugin.getServer().getOfflinePlayer(player));
             this.players.add(plugin.getServer().getOfflinePlayer(player));
             this.team.addPlayer(plugin.getServer().getOfflinePlayer(player));
         }
