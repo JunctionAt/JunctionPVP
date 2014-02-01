@@ -133,18 +133,20 @@ class Team {
             existing.removePlayer(player);
         }
 
+        if (!team.hasPlayer(player))
+            team.addPlayer(player);
+
         if (player.isOnline()) {
             player.getPlayer().teleport(spawnLocation);
+            player.getPlayer().sendMessage(
+                    String.format("%sWelcome to the %s, %s!", getColor(), player.getName(), getName()));
         }
 
         for (Player p : plugin.getServer().getOnlinePlayers()){
-            if (this.containsPlayer(p.getName())){
-                p.sendMessage(String.format("%sWelcome %s to the %s!", this.getColor(), player.getName(), this.getName()));
+            if (containsPlayer(p) && !p.equals(player)){
+                p.sendMessage(String.format("%sWelcome %s to the %s!", getColor(), player.getName(), getName()));
             }
         }
-
-        if (!team.hasPlayer(player))
-            team.addPlayer(player);
     }
 
     public void addPlayer(String playerName) throws Exception {
