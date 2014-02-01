@@ -57,10 +57,8 @@ public class JunctionPVP  extends JavaPlugin{
     @Override
     public void onDisable(){
         config.load(); //reload config before we save it, so we don't lose data if anything changed
-        for (Team team : teams.values())
-            team.saveTeam();
-        this.saveConfig();
 
+        this.saveConfig();
 
         getLogger().info("JunctionPVP Disabled");
     }

@@ -16,7 +16,6 @@ import java.util.HashSet;
 class Team {
     private final JunctionPVP plugin;
     private final List<Location> portalLocation;
-    private final HashSet<OfflinePlayer> players;
     private org.bukkit.scoreboard.Team team;
 
     private static HashMap<String, Team> teamNameMap = new HashMap<>();
@@ -83,13 +82,6 @@ class Team {
             if (temp != null)
                 this.portalLocation.add(temp);
         }
-        this.players = new HashSet<>();
-        for (String player : plugin.getConfig().getStringList(name + ".players")){
-            plugin.util.debugLogger(String.format("Adding %s to team %s", player, this.getName()));
-            System.out.println(plugin.getServer().getOfflinePlayer(player));
-            this.players.add(plugin.getServer().getOfflinePlayer(player));
-            this.team.addPlayer(plugin.getServer().getOfflinePlayer(player));
-        }
 
         teamNameMap.put(name, this);
     }
@@ -125,19 +117,21 @@ class Team {
         return false;
     }
 
+    public boolean containsPlayer(OfflinePlayer player) {
+        return equals(getPlayerTeam(player));
+    }
+
     public boolean containsPlayer(String playerName){
-        return players.contains(plugin.getServer().getOfflinePlayer(playerName));
+        return containsPlayer(plugin.getServer().getOfflinePlayer(playerName));
     }
 
     public void addPlayer(OfflinePlayer player) throws Exception {
-        if (this.players.contains(player)) throw new Exception("Player is already on this team");
+        if (containsPlayer(player)) throw new Exception("Player is already on this team");
 
         Team existing = getPlayerTeam(player);
         if (existing != null) {
             existing.removePlayer(player);
         }
-
-        players.add(player);
 
         if (player.isOnline()) {
             player.getPlayer().teleport(spawnLocation);
@@ -158,10 +152,8 @@ class Team {
     }
 
     public void removePlayer(OfflinePlayer player) {
-        if (!players.contains(player))
+        if (!containsPlayer(player))
             return;
-
-        players.remove(player);
 
         for (Player p : plugin.getServer().getOnlinePlayers()){
             if (this.containsPlayer(p.getName())){
@@ -173,7 +165,7 @@ class Team {
         }
     }
 
-    public void removePlayer(String playerName) throws Exception {
+    public void removePlayer(String playerName) {
         removePlayer(Bukkit.getServer().getOfflinePlayer(playerName));
     }
 
@@ -200,7 +192,7 @@ class Team {
      */
     public String getFormattedPlayerList(){
         StringBuilder sb = new StringBuilder();
-        for (OfflinePlayer op : players){
+        for (OfflinePlayer op : team.getPlayers()){
             if (op.isOnline()){
                 sb.append(op.getName());
                 sb.append(", ");
@@ -208,19 +200,6 @@ class Team {
         }
         if (sb.length() == 0) return null;
         return sb.substring(0, sb.length()-2);
-    }
-
-    /*
-    * Save team config
-     */
-    public void saveTeam(){
-        List<String> tempPlayerList = new ArrayList<>();
-        for (OfflinePlayer op : players){
-            tempPlayerList.add(op.getName());
-        }
-        plugin.getConfig().set(name + ".players", tempPlayerList);
-        plugin.getConfig().set(name + ".score", score);
-
     }
 
     //Returns a location given world,x,y,z
@@ -244,8 +223,11 @@ class Team {
         data.append("\n");
 
         data.append("players: ");
-        for (OfflinePlayer p : players){
-            data.append(p).append(", ");
+        for (OfflinePlayer p : team.getPlayers()){
+            data.append(p.getName());
+            if (!p.isOnline())
+                data.append(" [offline]");
+            data.append(", ");
         }
         data.append("\n");
 
