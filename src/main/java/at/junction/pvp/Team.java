@@ -132,8 +132,9 @@ class Team {
     public void addPlayer(OfflinePlayer player) throws Exception {
         if (this.players.contains(player)) throw new Exception("Player is already on this team");
 
-        if (getPlayerTeam(player) != null) {
-            removePlayer(player);
+        Team existing = getPlayerTeam(player);
+        if (existing != null) {
+            existing.removePlayer(player);
         }
 
         players.add(player);
