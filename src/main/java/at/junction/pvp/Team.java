@@ -5,10 +5,10 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.HashSet;
 
@@ -18,6 +18,8 @@ class Team {
     private final List<Location> portalLocation;
     private final HashSet<OfflinePlayer> players;
     private org.bukkit.scoreboard.Team team;
+
+    private static HashMap<String, Team> teamNameMap = new HashMap<>();
 
     private final String name;
     public String getName(){
@@ -50,16 +52,12 @@ class Team {
         return spawnLocation;
     }
 
-
-
     private final String regionName;
     public String getRegionName() {
         return regionName;
     }
 
-
-
-    public Team(JunctionPVP plugin, String name){
+    public Team(JunctionPVP plugin, String name) {
         this.plugin = plugin;
         this.name = name;
         this.score = plugin.getConfig().getInt(name + ".score");
@@ -92,6 +90,26 @@ class Team {
             this.players.add(plugin.getServer().getOfflinePlayer(player));
             this.team.addPlayer(plugin.getServer().getOfflinePlayer(player));
         }
+
+        teamNameMap.put(name, this);
+    }
+
+    public static Team getPlayerTeam(OfflinePlayer p) {
+        Scoreboard sb = Bukkit.getScoreboardManager().getMainScoreboard();
+        return teamNameMap.get(sb.getPlayerTeam(p).getName());
+    }
+
+    public static Team getPlayerTeam(String playerName) throws Exception {
+        return getPlayerTeam(Bukkit.getServer().getOfflinePlayer(playerName));
+    }
+
+    public static String getPlayerTeamName(OfflinePlayer p) {
+        Team t = getPlayerTeam(p);
+        return (t == null) ? null : t.getName();
+    }
+
+    public static String getPlayerTeamName(String playerName) throws Exception {
+        return getPlayerTeamName(Bukkit.getServer().getOfflinePlayer(playerName));
     }
 
     public boolean isPortalLocation(Location loc){
@@ -107,51 +125,69 @@ class Team {
         return players.contains(plugin.getServer().getOfflinePlayer(playerName));
     }
 
-    public void addPlayer(String playerName) throws Exception{
-        if (this.containsPlayer(playerName)) throw new Exception("Player is already on this team");
+    public void addPlayer(OfflinePlayer player) throws Exception {
+        if (this.players.contains(player)) throw new Exception("Player is already on this team");
 
-        players.add(plugin.getServer().getOfflinePlayer(playerName));
+        if (getPlayerTeam(player) != null) {
+            removePlayer(player);
+        }
 
-        plugin.getServer().getPlayer(playerName).teleport(spawnLocation);
+        players.add(player);
+
+        if (player.isOnline()) {
+            player.getPlayer().teleport(spawnLocation);
+        }
 
         for (Player p : plugin.getServer().getOnlinePlayers()){
             if (this.containsPlayer(p.getName())){
-                p.sendMessage(String.format("%sWelcome %s to the %s!", this.getColor(), playerName, this.getName()));
+                p.sendMessage(String.format("%sWelcome %s to the %s!", this.getColor(), player.getName(), this.getName()));
             }
         }
 
-        plugin.getServer().getPlayer(playerName).setMetadata("JunctionPVP.team", new FixedMetadataValue(plugin, getName()));
-
-        if (!team.hasPlayer(plugin.getServer().getOfflinePlayer(playerName))){
-            team.addPlayer(plugin.getServer().getOfflinePlayer(playerName));
-        }
-
+        if (!team.hasPlayer(player))
+            team.addPlayer(player);
     }
 
-    public void removePlayer(String playerName) throws Exception{
-        if (!containsPlayer(playerName)) throw new Exception("Player is not on that team");
-        players.remove(plugin.getServer().getOfflinePlayer(playerName));
+    public void addPlayer(String playerName) throws Exception {
+        addPlayer(Bukkit.getServer().getOfflinePlayer(name));
+    }
+
+    public void removePlayer(OfflinePlayer player) {
+        if (!players.contains(player))
+            return;
+
+        players.remove(player);
 
         for (Player p : plugin.getServer().getOnlinePlayers()){
             if (this.containsPlayer(p.getName())){
-                p.sendMessage(String.format("%s%s has left the %s :(", this.getColor(), playerName, this.getName()));
+                p.sendMessage(String.format("%s%s has left the %s :(", this.getColor(), player.getName(), this.getName()));
             }
         }
-        if (team.hasPlayer(plugin.getServer().getOfflinePlayer(playerName))){
-            team.removePlayer(plugin.getServer().getPlayer(playerName));
+        if (team.hasPlayer(player)){
+            team.removePlayer(player);
         }
     }
+
+    public void removePlayer(String playerName) throws Exception {
+        removePlayer(Bukkit.getServer().getOfflinePlayer(name));
+    }
+
     /*
     * Add single or multiple points to a team
      */
-    public void addPoint(Integer... amount) {
-        if (amount.length == 0) {
+    public void addPoint(Integer amount) {
+        if (amount == 0) {
+            return;
+        } else if (amount == 1) {
             plugin.util.debugLogger(String.format("%s scored a point", name));
-            score++;
-        } else if (amount.length == 1){
-            plugin.util.debugLogger(String.format("%s scored %s points", name, amount[0].toString()));
-            score+= amount[0];
+        } else {
+            plugin.util.debugLogger(String.format("%s scored %s points", name, amount.toString()));
         }
+        score += amount;
+    }
+
+    public void addPoint() {
+        addPoint(1);
     }
 
     /*
