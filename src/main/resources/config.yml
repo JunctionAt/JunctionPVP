@@ -12,8 +12,8 @@ Red:
   friendlyFire: false
   regionName: red
   players: []
-  joinLocation: world,-10,75,0
-  spawnLocation: world,-10,75,0
+  joinLocation: world,-10,75,0,0,90
+  spawnLocation: world,-10,75,0,0,90
   portalLocation: []
 Blue:
   score: 0
@@ -21,8 +21,8 @@ Blue:
   friendlyFire: false
   regionName: blue
   players: []
-  joinLocation: world,10,75,0
-  spawnLocation: world,10,75,0
+  joinLocation: world,10,75,0,0,90
+  spawnLocation: world,10,75,0,0,90
   portalLocation: []
 Orange:
   score: 0
@@ -30,6 +30,6 @@ Orange:
   friendlyFire: true
   regionName: orange
   players: []
-  joinLocation: world,0,75,10
-  spawnLocation: world,0,75,10
+  joinLocation: world,0,75,10,0,90
+  spawnLocation: world,0,75,10,0,90
   portalLocation: []

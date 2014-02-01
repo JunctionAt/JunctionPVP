@@ -62,8 +62,8 @@ class Team {
         this.score = plugin.getConfig().getInt(name + ".score");
         this.color =  ChatColor.valueOf(plugin.getConfig().getString(name + ".color"));
         this.friendlyFire = plugin.getConfig().getBoolean(name + ".friendlyFire");
-        this.joinLocation = getLocation(plugin.getConfig().getString(name + ".joinLocation"));
-        this.spawnLocation = getLocation(plugin.getConfig().getString(name+".spawnLocation"));
+        this.joinLocation = plugin.util.getLocation(plugin.getConfig().getString(name + ".joinLocation"));
+        this.spawnLocation = plugin.util.getLocation(plugin.getConfig().getString(name+".spawnLocation"));
         this.regionName = plugin.getConfig().getString(name + ".regionName");
 
         //Scoreboard init & team prefix
@@ -78,7 +78,7 @@ class Team {
         List<String> portalCoords = plugin.getConfig().getStringList(name+".portalLocation");
         portalLocation = new ArrayList<>();
         for (String coord : portalCoords){
-            Location temp = getLocation(coord);
+            Location temp = plugin.util.getLocation(coord);
             if (temp != null)
                 this.portalLocation.add(temp);
         }
@@ -204,16 +204,6 @@ class Team {
         return sb.substring(0, sb.length()-2);
     }
 
-    //Returns a location given world,x,y,z
-    private Location getLocation(String in){
-        String[] loc = in.split(",");
-        if (loc.length != 4){
-            return null;
-        }
-        return new Location(plugin.getServer().getWorld(loc[0]), Double.parseDouble(loc[1]), Double.parseDouble(loc[2]), Double.parseDouble(loc[3]));
-
-
-    }
 
     //Prints out teamdata. Debugging stuff. Use with /printteam.
     public String toString(){

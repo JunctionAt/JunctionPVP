@@ -102,5 +102,22 @@ class Util {
     void removePvpTimer(Player p){
         pvpCooldownMap.values().removeAll(Collections.singleton(p));
     }
+    //Returns a location given world,x,y,z,pitch,yaw
+    Location getLocation(String in){
+        String[] loc = in.split(",");
+        if (loc.length != 6){
+            return null;
+        }
+        return new Location(plugin.getServer().getWorld(loc[0]),
+                Double.parseDouble(loc[1]),
+                Double.parseDouble(loc[2]),
+                Double.parseDouble(loc[3]),
+                Float.parseFloat(loc[4]),
+                Float.parseFloat(loc[5])
+        );
+
+
+    }
+
 
 }
