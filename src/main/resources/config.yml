@@ -1,7 +1,11 @@
 debug: false
-teamNames: Red, Blue, Orange
+teamNames:
+- Red
+- Blue
+- Orange
 pvpRegionName: pvp
 pvpCooldown: 30
+playerPortalTpFailLocation: world,-10,75,10,0,0
 Red:
   score: 0
   color: RED

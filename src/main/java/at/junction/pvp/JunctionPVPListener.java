@@ -14,7 +14,6 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
@@ -66,6 +65,7 @@ public class JunctionPVPListener implements Listener {
                         event.getPlayer().teleport(t.getSpawnLocation());
                     } else {
                         event.setCancelled(true);
+                        event.getPlayer().teleport(plugin.config.PLAYER_PORTAL_TP_FAIL_LOCATION);
                         event.getPlayer().sendMessage("You cannot go through another team's portal. If you are trying to switch teams, bring a diamond block back to spawn");
                     }
                 }
