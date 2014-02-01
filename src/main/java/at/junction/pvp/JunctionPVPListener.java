@@ -50,23 +50,25 @@ public class JunctionPVPListener implements Listener {
      */
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerMoveEvent(PlayerMoveEvent event) {
-        //Player is on a team, we ONLY care if they're going through their portal
-        Team team = Team.getPlayerTeam(event.getPlayer());
-        if (team != null) {
-            if (team.isPortalLocation(event.getTo())) {
-                event.getPlayer().teleport(team.getSpawnLocation());
-            }
-            return;
-        }
-
-        for (Team t : plugin.teams.values()) {
-            if (t.isPortalLocation(event.getTo())) {
-                try {
-                    t.addPlayer(event.getPlayer().getName());
-                } catch (Exception e) {
-                    return;
+        Team playerTeam = Team.getPlayerTeam(event.getPlayer());
+        for (Team t : plugin.teams.values()){
+            if (t.isPortalLocation((event.getTo()))){
+                //Player is joining a team
+                if (playerTeam == null) {
+                    try {
+                        t.addPlayer(event.getPlayer().getName());
+                    } catch (Exception e){
+                        return;
+                    }
+                //Player is already on a team and entering a portal
+                } else {
+                    if (t.containsPlayer(event.getPlayer().getName())){
+                        event.getPlayer().teleport(t.getSpawnLocation());
+                    } else {
+                        event.setCancelled(true);
+                        event.getPlayer().sendMessage("You cannot go through another team's portal. If you are trying to switch teams, bring a diamond block back to spawn");
+                    }
                 }
-                return;
             }
         }
     }
