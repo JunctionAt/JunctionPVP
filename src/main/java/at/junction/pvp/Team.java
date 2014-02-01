@@ -153,7 +153,7 @@ class Team {
     }
 
     public void addPlayer(String playerName) throws Exception {
-        addPlayer(Bukkit.getServer().getOfflinePlayer(name));
+        addPlayer(Bukkit.getServer().getOfflinePlayer(playerName));
     }
 
     public void removePlayer(OfflinePlayer player) {
@@ -173,7 +173,7 @@ class Team {
     }
 
     public void removePlayer(String playerName) throws Exception {
-        removePlayer(Bukkit.getServer().getOfflinePlayer(name));
+        removePlayer(Bukkit.getServer().getOfflinePlayer(playerName));
     }
 
     /*
