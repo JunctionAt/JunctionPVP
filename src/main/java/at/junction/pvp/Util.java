@@ -107,13 +107,6 @@ class Util {
         p.setMetadata("JunctionPVP.team", new FixedMetadataValue(plugin, t.getName()));
     }
 
-//    /*
-//    * Gives you an offlinePlayer for a playerName
-//     */
-//    OfflinePlayer getOfflinePlayer(String playerName){
-//        return plugin.getServer().getOfflinePlayer(playerName);
-//    }
-
     boolean blockEquals(Location one, Location two){
         return (one.getWorld().equals(two.getWorld()))
                 && (one.getBlockX() == two.getBlockX())
