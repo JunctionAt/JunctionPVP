@@ -177,44 +177,45 @@ public class JunctionPVPListener implements Listener {
      */
     @EventHandler(priority = EventPriority.MONITOR)
     public void onBlockPlaceEvent(BlockPlaceEvent event) {
-        if (event.getBlockPlaced().getType().equals(Material.DIAMOND_BLOCK)) {
-            if (Team.getPlayerTeam(event.getPlayer()) == null) {
-                event.setCancelled(true);
-                event.getPlayer().sendMessage(ChatColor.RED + "You must join a team first, go back to spawn");
-            } else {
-                for (Team t : plugin.teams.values()) {
-                    Location teamJoinLocation = t.getJoinLocation();
-                    Location blockPlacedLocation = event.getBlockPlaced().getLocation();
-
-                    if (plugin.util.blockEquals(teamJoinLocation, blockPlacedLocation)) {
-                        if (event.isCancelled()) {
-                            event.setCancelled(false);
-                        }
-                        //Same Block, Swap Teams
-                        if (t.containsPlayer(event.getPlayer().getName())) {
+        if (event.getBlock().getType() != Material.DIAMOND_BLOCK){
+            return;
+        }
+        for (Team t : plugin.teams.values()){
+            Location teamJoinLocation = t.getJoinLocation();
+            Location blockedPlacedLocation = event.getBlockPlaced().getLocation();
+            if (plugin.util.blockEquals(teamJoinLocation, blockedPlacedLocation)){
+                if (Team.getPlayerTeam(event.getPlayer()) == null) {
+                    event.setCancelled(true);
+                    event.getPlayer().sendMessage(ChatColor.RED + "You must join a team first, go back to spawn");
+                    return;
+                } else {
+                    if (event.isCancelled()) {
+                        event.setCancelled(false);
+                    }
+                    //Same Block, Swap Teams
+                    if (t.containsPlayer(event.getPlayer().getName())) {
+                        event.setCancelled(true);
+                        event.getPlayer().sendMessage(ChatColor.RED + "You're already on that team!");
+                    } else {
+                        //Give them their block back, as they joined the losing team
+                        if (t.equals(plugin.util.lowestScoreTeam())) {
                             event.setCancelled(true);
-                            event.getPlayer().sendMessage(ChatColor.RED + "You're already on that team!");
-                        } else {
-                            //Give them their block back, as they joined the losing team
-                            if (t.equals(plugin.util.lowestScoreTeam())) {
-                                event.setCancelled(true);
-                                event.getPlayer().sendMessage(String.format("%sThis team swap was free, as %s is losing!", t.getColor(), t.getName()));
-                            }
-                            //Swap Team
-                            try {
-                                t.addPlayer(event.getPlayer());
-                            } catch (Exception e) {
-                                //Shouldn't happen, as we've checked all conditions.
-                                plugin.getLogger().severe("You broke the universe. How could you?");
-                                e.printStackTrace();
-                            }
-                            //Reset player inventory, so they see the item again
-                            //noinspection deprecation
-                            event.getPlayer().updateInventory();
-                            //Finally, remove the block (replace with air)
-                            event.getBlockPlaced().setType(Material.AIR);
-
+                            event.getPlayer().sendMessage(String.format("%sThis team swap was free, as %s is losing!", t.getColor(), t.getName()));
                         }
+                        //Swap Team
+                        try {
+                            t.addPlayer(event.getPlayer());
+                        } catch (Exception e) {
+                            //Shouldn't happen, as we've checked all conditions.
+                            plugin.getLogger().severe("You broke the universe. How could you?");
+                            e.printStackTrace();
+                        }
+                        //Reset player inventory, so they see the item again
+                        //noinspection deprecation
+                        event.getPlayer().updateInventory();
+                        //Finally, remove the block (replace with air)
+                        event.getBlockPlaced().setType(Material.AIR);
+
                     }
                 }
             }
