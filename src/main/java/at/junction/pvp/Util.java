@@ -3,7 +3,6 @@ package at.junction.pvp;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.metadata.FixedMetadataValue;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -69,42 +68,17 @@ class Util {
         debugLogger(String.format("Lowest team is %s", lowTeam == null ? "none" : lowTeam.getName()));
         return lowTeam;
     }
-    /*
-    * Returns a STRING team name for a player
-     */
-    String getTeamName(Player p){
-        if (p.hasMetadata("JunctionPVP.team"))
-            return (String)p.getMetadata("JunctionPVP.team").get(0).value();
-        return null;
-    }
-
-    /*
-    * Returns a TEAM object for a player
-     */
-    Team getTeam(Player p){
-        if (p.hasMetadata("JunctionPVP.team")){
-            return (plugin.teams.get(getTeamName(p)));
-        }
-        return null;
-    }
 
     /*
     * Returns true if players are on the same team
      */
     boolean sameTeam(Player one, Player two){
         //noinspection SimplifiableIfStatement
-        if (one.hasMetadata("JunctionPVP.team") && two.hasMetadata("JunctionPVP.team"))
-            return (one.getMetadata("JunctionPVP.team").get(0).value().equals(two.getMetadata("JunctionPVP.team").get(0).value()));
+        Team oneTeam = Team.getPlayerTeam(one);
+        Team twoTeam = Team.getPlayerTeam(two);
+        if (oneTeam != null && twoTeam != null)
+            return oneTeam.equals(twoTeam);
         return false;
-    }
-    /*
-    * Changes a player to a new team
-     */
-    void changeTeam(Player p, Team t) throws Exception{
-        getTeam(p).removePlayer(p.getName());
-        t.addPlayer(p.getName());
-        p.removeMetadata("JunctionPVP.team", plugin);
-        p.setMetadata("JunctionPVP.team", new FixedMetadataValue(plugin, t.getName()));
     }
 
     boolean blockEquals(Location one, Location two){
