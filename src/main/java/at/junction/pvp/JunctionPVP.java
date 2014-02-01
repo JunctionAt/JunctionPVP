@@ -11,6 +11,7 @@ import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
 import java.io.File;
 import java.util.HashMap;
+import org.bukkit.OfflinePlayer;
 
 @SuppressWarnings("WeakerAccess")
 public class JunctionPVP  extends JavaPlugin{
@@ -82,7 +83,7 @@ public class JunctionPVP  extends JavaPlugin{
                 return true;
             }
             try {
-                util.changeTeam(toSwitch, teams.get(args[1]));
+                teams.get(args[1]).addPlayer(toSwitch);
                 sender.sendMessage("Done");
             } catch (Exception e){
                 sender.sendMessage(e.getMessage());
@@ -97,16 +98,8 @@ public class JunctionPVP  extends JavaPlugin{
             }
             //Remove player from team objects
             //Doesn't use util.getTeam(), as it won't work on offlinePlayers
-            for (Team t : teams.values()){
-                if (t.containsPlayer(playerName)){
-                    try {
-                        t.removePlayer(playerName);
-                        break;
-                    } catch (Exception e){
-                        //do nothing, won't happen
-                    }
-                }
-            }
+            OfflinePlayer op = getServer().getOfflinePlayer(playerName);
+            Team.getPlayerTeam(op).removePlayer(op);
             //If player is online, remove metadata
             Player p = getServer().getPlayer(args[0]);
             if (p != null){

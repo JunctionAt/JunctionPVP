@@ -51,10 +51,10 @@ public class JunctionPVPListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerMoveEvent(PlayerMoveEvent event) {
         //Player is on a team, we ONLY care if they're going through their portal
-        if (event.getPlayer().hasMetadata("JunctionPVP.team")) {
-            Team t = plugin.util.getTeam(event.getPlayer());
-            if (t.isPortalLocation(event.getTo())) {
-                event.getPlayer().teleport(t.getSpawnLocation());
+        Team team = Team.getPlayerTeam(event.getPlayer());
+        if (team != null) {
+            if (team.isPortalLocation(event.getTo())) {
+                event.getPlayer().teleport(team.getSpawnLocation());
             }
             return;
         }
@@ -80,9 +80,9 @@ public class JunctionPVPListener implements Listener {
         if (event.isBedSpawn()) {
             plugin.util.debugLogger("Player tried to spawn in bed...");
             //If player isn't in their team region, disable bed spawns
-            if (!plugin.util.isTeamRegion(plugin.teams.get(plugin.util.getTeamName(event.getPlayer())), event.getRespawnLocation())) {
+            if (!plugin.util.isTeamRegion(plugin.teams.get(Team.getPlayerTeamName(event.getPlayer())), event.getRespawnLocation())) {
 
-                event.setRespawnLocation(plugin.util.getTeam(event.getPlayer()).getSpawnLocation());
+                event.setRespawnLocation(Team.getPlayerTeam(event.getPlayer()).getSpawnLocation());
                 event.getPlayer().sendMessage("You can only spawn in a bed in your team's region. Back to your team's spawn with you...");
             }
         }
@@ -128,16 +128,15 @@ public class JunctionPVPListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityDeathEvent(EntityDeathEvent event) {
         if (event.getEntity() instanceof Player) {
+            Player victim = (Player)event.getEntity();
             Player killer = event.getEntity().getKiller();
             //Not killed by player, return
             if (killer == null) return;
             //Remove player pvp cooldown on death
             plugin.util.removePvpTimer((Player)event.getEntity());
             //If they aren't on the same team, add a point ot the killer's team
-            if (!event.getEntity().getMetadata("JunctionPVP.team").get(0).value()
-                    .equals(killer.getMetadata("JunctionPVP.team").get(0).value())) {
-                plugin.util.getTeam(killer).addPoint();
-            }
+            if (Team.getPlayerTeam(killer) != null && !plugin.util.sameTeam(victim, killer))
+                Team.getPlayerTeam(killer).addPoint();
         } else if (plugin.util.isPvpRegion(event.getEntity().getLocation())) {
             if (hostileEntities.contains(event.getEntityType())) {
                 if (event.getEntity().hasMetadata("JunctionPVP.spawn")) {
@@ -163,7 +162,7 @@ public class JunctionPVPListener implements Listener {
             //If both players are in the PvP region
             if (plugin.util.isPvpRegion(entity.getLocation()) && plugin.util.isPvpRegion(damager.getLocation())) {
                 //If players are on the same team AND friendly fire is not enabled
-                if (plugin.util.sameTeam(damager, entity) && !plugin.util.getTeam(damager).getFriendlyFire()) {
+                if (plugin.util.sameTeam(damager, entity) && !Team.getPlayerTeam(damager).getFriendlyFire()) {
                     event.setCancelled(true);
                     damager.sendMessage("Friendly Fire is disabled!");
                     return;
@@ -174,25 +173,12 @@ public class JunctionPVPListener implements Listener {
     }
 
     /*
-    * Add metadata to player on join
-     */
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void onPlayerJoin(PlayerJoinEvent event) {
-        for (Team t : plugin.teams.values()) {
-            if (t.containsPlayer(event.getPlayer().getName())) {
-                event.getPlayer().setMetadata("JunctionPVP.team", new FixedMetadataValue(plugin, t.getName()));
-                return;
-            }
-        }
-    }
-
-    /*
     * Used for team swapping
      */
     @EventHandler(priority = EventPriority.MONITOR)
     public void onBlockPlaceEvent(BlockPlaceEvent event) {
         if (event.getBlockPlaced().getType().equals(Material.DIAMOND_BLOCK)) {
-            if (plugin.util.getTeam(event.getPlayer()) == null) {
+            if (Team.getPlayerTeam(event.getPlayer()) == null) {
                 event.setCancelled(true);
                 event.getPlayer().sendMessage(ChatColor.RED + "You must join a team first, go back to spawn");
             } else {
@@ -216,7 +202,7 @@ public class JunctionPVPListener implements Listener {
                             }
                             //Swap Team
                             try {
-                                plugin.util.changeTeam(event.getPlayer(), t);
+                                t.addPlayer(event.getPlayer());
                             } catch (Exception e) {
                                 //Shouldn't happen, as we've checked all conditions.
                                 plugin.getLogger().severe("You broke the universe. How could you?");
@@ -243,7 +229,7 @@ public class JunctionPVPListener implements Listener {
 
         if (plugin.util.hasPvpCooldown(defender)){
             if (plugin.util.sameTeam(defender, attacker)) {
-                if (!plugin.util.getTeam(defender).getFriendlyFire()) {
+                if (!Team.getPlayerTeam(defender).getFriendlyFire()) {
                     attacker.sendMessage("Friendly fire is disabled for your team!");
                     return;
                 }
