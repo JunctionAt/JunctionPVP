@@ -96,7 +96,11 @@ class Team {
 
     public static Team getPlayerTeam(OfflinePlayer p) {
         Scoreboard sb = Bukkit.getScoreboardManager().getMainScoreboard();
-        return teamNameMap.get(sb.getPlayerTeam(p).getName());
+        org.bukkit.scoreboard.Team st = sb.getPlayerTeam(p);
+        if (st != null)
+            return teamNameMap.get(st.getName());
+        else
+            return null;
     }
 
     public static Team getPlayerTeam(String playerName) throws Exception {
