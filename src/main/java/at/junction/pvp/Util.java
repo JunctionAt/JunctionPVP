@@ -1,22 +1,21 @@
 package at.junction.pvp;
 
-import com.sk89q.worldguard.protection.regions.ProtectedRegion;
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
-
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
-import java.util.Collections;
+
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
+
+import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
 class Util {
     private final JunctionPVP plugin;
-    private final Map<Integer, Player> pvpCooldownMap;
+    private final Map<Player, BukkitTask> pvpCooldownMap = new HashMap<>();
 
     Util(JunctionPVP plugin){
         this.plugin = plugin;
-        pvpCooldownMap = new HashMap<>();
-
     }
     /*
     * isPvpRegion(Location location)
@@ -83,24 +82,36 @@ class Util {
 
     boolean blockEquals(Location one, Location two){
         return (one.getWorld().equals(two.getWorld()))
-                && (one.getBlockX() == two.getBlockX())
-                && (one.getBlockY() == two.getBlockY())
-                && (one.getBlockZ() == two.getBlockZ());
+            && (one.getBlockX() == two.getBlockX())
+            && (one.getBlockY() == two.getBlockY())
+            && (one.getBlockZ() == two.getBlockZ());
     }
 
     void resetPvpTimer(Player... players){
         for (Player p : players){
-            int key = new Random().nextInt();
-            pvpCooldownMap.put(key, p);
-            plugin.getServer().getScheduler().runTaskLater(plugin, new pvpCooldownRemoveTask(key, pvpCooldownMap), plugin.config.PVP_COOLDOWN_TICKS);
+            final Player player = p;
+            if (pvpCooldownMap.containsKey(p)) {
+                pvpCooldownMap.get(p).cancel();
+            }
+            BukkitTask task = plugin.getServer().getScheduler().runTaskLater(
+                plugin, new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        if (pvpCooldownMap.containsKey(player))
+                            pvpCooldownMap.remove(player);
+                    }
+                }, plugin.config.PVP_COOLDOWN_TICKS);
+            pvpCooldownMap.put(p, task);
         }
     }
+
     boolean hasPvpCooldown(Player p){
-        return pvpCooldownMap.values().contains(p);
+        return pvpCooldownMap.containsKey(p);
     }
 
     void removePvpTimer(Player p){
-        pvpCooldownMap.values().removeAll(Collections.singleton(p));
+        if (pvpCooldownMap.containsKey(p))
+            pvpCooldownMap.remove(p);
     }
     //Returns a location given world,x,y,z,pitch,yaw
     Location getLocation(String in){
@@ -115,9 +126,5 @@ class Util {
                 Float.parseFloat(loc[4]),
                 Float.parseFloat(loc[5])
         );
-
-
     }
-
-
 }
