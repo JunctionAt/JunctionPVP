@@ -88,9 +88,9 @@ public class JunctionPVPListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerRespawn(PlayerRespawnEvent event) {
         if (!event.isBedSpawn() || event.getPlayer().getBedSpawnLocation() == null) {
-            if (event.getPlayer().hasMetadata("JunctionPVP.team")) {
-                Team t = plugin.teams.get(event.getPlayer().getMetadata("JunctionPVP.team").get(0).value());
-                event.setRespawnLocation(t.getSpawnLocation());
+            Team team = Team.getPlayerTeam(event.getPlayer());
+            if (team != null) {
+                event.setRespawnLocation(team.getSpawnLocation());
             }
         }
     }
@@ -102,8 +102,9 @@ public class JunctionPVPListener implements Listener {
      */
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerBedEnter(PlayerBedEnterEvent event) {
-        if (event.getPlayer().hasMetadata("JunctionPVP.team")) {
-            if (!plugin.util.isTeamRegion(plugin.teams.get(event.getPlayer().getMetadata("JunctionPVP.team").get(0).value()), event.getBed().getLocation())){
+        Team team = Team.getPlayerTeam(event.getPlayer());
+        if (team != null) {
+            if (!plugin.util.isTeamRegion(team, event.getBed().getLocation())){
                 event.getPlayer().sendMessage("You can only sleep in a bed in your teams region");
                 event.setCancelled(true);
             }
