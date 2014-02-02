@@ -15,9 +15,9 @@ import java.util.List;
 class Team {
     private final JunctionPVP plugin;
     private final List<Location> portalLocation;
-    private org.bukkit.scoreboard.Team team;
+    private final org.bukkit.scoreboard.Team team;
 
-    private static HashMap<String, Team> teamNameMap = new HashMap<>();
+    private static final HashMap<String, Team> teamNameMap = new HashMap<>();
 
     private final String name;
     public String getName() {
@@ -78,6 +78,7 @@ class Team {
         } else {
             team = sb.getTeam(name);
         }
+        team.setDisplayName(friendlyName);
         team.setPrefix(color + "");
 
         List<String> portalCoords = plugin.getConfig().getStringList(name+".portalLocation");
