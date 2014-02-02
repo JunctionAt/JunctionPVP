@@ -149,7 +149,7 @@ class Team {
         if (player.isOnline()) {
             player.getPlayer().teleport(spawnLocation);
             player.getPlayer().sendMessage(
-                    String.format("%sWelcome to the %s, %s!", getColor(), player.getName(), getName()));
+                    String.format("%sWelcome to the %s, %s!", getColor(), getName(), player.getName()));
             updatePlayer(player.getPlayer());
         }
 
@@ -177,7 +177,7 @@ class Team {
 
         if (player.isOnline()) {
             player.getPlayer().sendMessage(
-                    String.format("%sYou have left the %s.", getColor(), player.getName(), getName()));
+                    String.format("%sYou have left the %s.", getColor(), getName()));
             updatePlayer(player.getPlayer());
         }
 
