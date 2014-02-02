@@ -1,27 +1,29 @@
 package at.junction.pvp;
 
 
-import com.sk89q.worldguard.protection.events.DisallowedPVPEvent;
+import java.util.*;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerBedEnterEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.Material;
 
-import java.util.*;
+import com.sk89q.worldguard.protection.events.DisallowedPVPEvent;
 
 
 @SuppressWarnings("WeakerAccess")
@@ -42,6 +44,11 @@ public class JunctionPVPListener implements Listener {
         hostileEntities.add(EntityType.SKELETON);
         hostileEntities.add(EntityType.WITCH);
         hostileEntities.add(EntityType.SPIDER);
+    }
+
+    @EventHandler(priority = EventPriority.NORMAL)
+    public void onPlayerJoinEvent(PlayerJoinEvent event) {
+        Team.updatePlayer(event.getPlayer());
     }
 
     /*

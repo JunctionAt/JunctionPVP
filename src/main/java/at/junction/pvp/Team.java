@@ -108,6 +108,17 @@ class Team {
         return getPlayerTeamName(Bukkit.getServer().getOfflinePlayer(playerName));
     }
 
+    public static void updatePlayer(Player player) {
+        Team t = getPlayerTeam(player);
+        if (t == null) {
+            player.setDisplayName(player.getName());
+            player.setCompassTarget(Bukkit.getServer().getWorlds().get(0).getSpawnLocation());
+        } else {
+            player.setDisplayName(t.getColor() + player.getName() + ChatColor.RESET);
+            player.setCompassTarget(t.getSpawnLocation());
+        }
+    }
+
     public boolean isPortalLocation(Location loc){
         for (Location l: portalLocation){
             if (plugin.util.blockEquals(l, loc)){
@@ -140,6 +151,7 @@ class Team {
             player.getPlayer().teleport(spawnLocation);
             player.getPlayer().sendMessage(
                     String.format("%sWelcome to the %s, %s!", getColor(), player.getName(), getName()));
+            updatePlayer(player.getPlayer());
         }
 
         for (Player p : plugin.getServer().getOnlinePlayers()){
@@ -160,13 +172,20 @@ class Team {
         if (!containsPlayer(player))
             return;
 
-        for (Player p : plugin.getServer().getOnlinePlayers()){
-            if (this.containsPlayer(p.getName())){
-                p.sendMessage(String.format("%s%s has left the %s :(", this.getColor(), player.getName(), this.getName()));
-            }
-        }
         if (team.hasPlayer(player)){
             team.removePlayer(player);
+        }
+
+        if (player.isOnline()) {
+            player.getPlayer().sendMessage(
+                    String.format("%sYou have left the %s.", getColor(), player.getName(), getName()));
+            updatePlayer(player.getPlayer());
+        }
+
+        for (Player p : plugin.getServer().getOnlinePlayers()){
+            if (containsPlayer(p.getName())){
+                p.sendMessage(String.format("%s%s has left the %s :(", getColor(), player.getName(), getName()));
+            }
         }
     }
 
