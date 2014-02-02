@@ -78,7 +78,7 @@ public class JunctionPVPListener implements Listener {
     * onPlayerRespawn
     * Moves players to correct location on spawn
      */
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerRespawn(PlayerRespawnEvent event) {
         if (!event.isBedSpawn() || event.getPlayer().getBedSpawnLocation() == null) {
             if (event.getPlayer().hasMetadata("JunctionPVP.team")) {
