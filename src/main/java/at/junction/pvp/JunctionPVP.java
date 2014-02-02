@@ -120,7 +120,7 @@ public class JunctionPVP  extends JavaPlugin{
             }
             Player player = getServer().getPlayer(args[0]);
             if (player == null) {
-                sender.sendMessage(ChatColor.RED + "Player doesns't exist");
+                sender.sendMessage(ChatColor.RED + "Player doesn't exist");
                 return true;
             }
 
