@@ -222,7 +222,7 @@ public class JunctionPVPListener implements Listener {
                         //Give them their block back, as they joined the losing team
                         if (t.equals(plugin.util.lowestScoreTeam())) {
                             event.setCancelled(true);
-                            event.getPlayer().sendMessage(String.format("%sThis team swap was free, as %s is losing!", t.getColor(), t.getName()));
+                            event.getPlayer().sendMessage(String.format("%sThis team swap was free, as %s is losing!", t.getColor(), t.getFriendlyName()));
                         }
                         //Swap Team
                         try {

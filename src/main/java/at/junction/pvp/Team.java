@@ -20,8 +20,13 @@ class Team {
     private static HashMap<String, Team> teamNameMap = new HashMap<>();
 
     private final String name;
-    public String getName(){
+    public String getName() {
         return name;
+    }
+
+    private final String friendlyName;
+    public String getFriendlyName() {
+        return friendlyName;
     }
 
     private int score;
@@ -55,9 +60,10 @@ class Team {
         return regionName;
     }
 
-    public Team(JunctionPVP plugin, String name) {
+    private Team(JunctionPVP plugin, String name) {
         this.plugin = plugin;
         this.name = name;
+        this.friendlyName = plugin.getConfig().getString(name + ".friendlyName");
         this.score = plugin.getConfig().getInt(name + ".score");
         this.color =  ChatColor.valueOf(plugin.getConfig().getString(name + ".color"));
         this.friendlyFire = plugin.getConfig().getBoolean(name + ".friendlyFire");
@@ -81,8 +87,12 @@ class Team {
             if (temp != null)
                 this.portalLocation.add(temp);
         }
+    }
 
-        teamNameMap.put(name, this);
+    public static Team create(JunctionPVP plugin, String name) {
+        Team t = new Team(plugin, name);
+        teamNameMap.put(name, t);
+        return t;
     }
 
     public static Team getPlayerTeam(OfflinePlayer p) {
@@ -96,15 +106,6 @@ class Team {
 
     public static Team getPlayerTeam(String playerName) throws Exception {
         return getPlayerTeam(Bukkit.getServer().getOfflinePlayer(playerName));
-    }
-
-    public static String getPlayerTeamName(OfflinePlayer p) {
-        Team t = getPlayerTeam(p);
-        return (t == null) ? null : t.getName();
-    }
-
-    public static String getPlayerTeamName(String playerName) throws Exception {
-        return getPlayerTeamName(Bukkit.getServer().getOfflinePlayer(playerName));
     }
 
     public static void updatePlayer(Player player) {
@@ -149,13 +150,13 @@ class Team {
         if (player.isOnline()) {
             player.getPlayer().teleport(spawnLocation);
             player.getPlayer().sendMessage(
-                    String.format("%sWelcome to the %s, %s!", getColor(), getName(), player.getName()));
+                    String.format("%sWelcome to the %s, %s!", getColor(), getFriendlyName(), player.getName()));
             updatePlayer(player.getPlayer());
         }
 
         for (Player p : plugin.getServer().getOnlinePlayers()){
             if (containsPlayer(p) && !p.equals(player)){
-                p.sendMessage(String.format("%sWelcome %s to the %s!", getColor(), player.getName(), getName()));
+                p.sendMessage(String.format("%sWelcome %s to the %s!", getColor(), player.getName(), getFriendlyName()));
             }
         }
         //Clear bed spawn on team change. If no bed spawn location exists, listener moves them to team spawn.
@@ -177,13 +178,13 @@ class Team {
 
         if (player.isOnline()) {
             player.getPlayer().sendMessage(
-                    String.format("%sYou have left the %s.", getColor(), getName()));
+                    String.format("%sYou have left the %s.", getColor(), getFriendlyName()));
             updatePlayer(player.getPlayer());
         }
 
         for (Player p : plugin.getServer().getOnlinePlayers()){
             if (containsPlayer(p.getName())){
-                p.sendMessage(String.format("%s%s has left the %s :(", getColor(), player.getName(), getName()));
+                p.sendMessage(String.format("%s%s has left the %s :(", getColor(), player.getName(), getFriendlyName()));
             }
         }
     }
@@ -199,9 +200,9 @@ class Team {
         if (amount == 0) {
             return;
         } else if (amount == 1) {
-            plugin.util.debugLogger(String.format("%s scored a point", name));
+            plugin.util.debugLogger(String.format("%s scored a point", friendlyName));
         } else {
-            plugin.util.debugLogger(String.format("%s scored %s points", name, amount.toString()));
+            plugin.util.debugLogger(String.format("%s scored %s points", friendlyName, amount.toString()));
         }
         score += amount;
     }
@@ -229,7 +230,7 @@ class Team {
     //Prints out teamdata. Debugging stuff. Use with /printteam.
     public String toString(){
         StringBuilder data = new StringBuilder();
-        data.append(color).append(name);
+        data.append(color).append(friendlyName);
         data.append("\n");
 
         data.append("region name: ").append(regionName);
@@ -267,7 +268,7 @@ class Team {
     }
 
     //Override equality - if team names are the same, teams are the same.
-    public boolean equals(Team t){
-        return t != null && name.equals(t.getName());
+    public boolean equals(Team t) {
+        return t != null && getName().equals(t.getName());
     }
 }

@@ -46,7 +46,7 @@ public class JunctionPVP  extends JavaPlugin{
 
         teams = new HashMap<>();
         for(String team : config.TEAM_NAMES){
-            teams.put(team, new Team(this, team));
+            teams.put(team, Team.create(this, team));
         }
 
         getLogger().info("JunctionPVP Enabled");
@@ -63,31 +63,31 @@ public class JunctionPVP  extends JavaPlugin{
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String name, String[] args) {
-        if (name.equalsIgnoreCase("teams")){
-            for (Team team : teams.values()){
-                sender.sendMessage(String.format("%s%s (Score: %s)%s:", team.getColor().toString(), team.getName(), team.getScore(), ChatColor.RESET.toString()));
+        if (name.equalsIgnoreCase("teams")) {
+            for (Team team : teams.values()) {
+                sender.sendMessage(String.format("%s%s (Score: %s)%s:", team.getColor().toString(), team.getFriendlyName(), team.getScore(), ChatColor.RESET.toString()));
                 sender.sendMessage(team.getFormattedPlayerList());
             }
-        } else if (name.equalsIgnoreCase("team-set")){
+        } else if (name.equalsIgnoreCase("team-set")) {
             if (args.length < 2){
                 sender.sendMessage(ChatColor.RED + "Usage: /team-set <player> <team name>");
                 return true;
             }
             Player toSwitch = getServer().getPlayer(args[0]);
-            if (toSwitch == null){
+            if (toSwitch == null) {
                 sender.sendMessage(ChatColor.RED + "This player is not online");
                 return true;
             }
             try {
                 teams.get(args[1]).addPlayer(toSwitch);
                 sender.sendMessage("Done");
-            } catch (Exception e){
+            } catch (Exception e) {
                 sender.sendMessage(e.getMessage());
             }
 
-        } else if (name.equalsIgnoreCase("team-remove")){
+        } else if (name.equalsIgnoreCase("team-remove")) {
             String playerName;
-            if (args.length >= 1){
+            if (args.length >= 1) {
                 playerName = args[0];
             } else {
                 playerName = sender.getName();
@@ -96,23 +96,17 @@ public class JunctionPVP  extends JavaPlugin{
             //Doesn't use util.getTeam(), as it won't work on offlinePlayers
             OfflinePlayer op = getServer().getOfflinePlayer(playerName);
             Team.getPlayerTeam(op).removePlayer(op);
-            //If player is online, remove metadata
-            Player p = getServer().getPlayer(args[0]);
-            if (p != null){
-                if (p.hasMetadata("JunctionPVP.team"))
-                    p.removeMetadata("JunctionPVP.team", this);
-            }
             sender.sendMessage("Done");
-        } else if (name.equalsIgnoreCase("team-print")){
-            for (Team t : teams.values()){
+        } else if (name.equalsIgnoreCase("team-print")) {
+            for (Team t : teams.values()) {
                 sender.sendMessage(t.toString());
             }
-        } else if (name.equalsIgnoreCase("team-addpoints")){
+        } else if (name.equalsIgnoreCase("team-addpoints")) {
             int amount;
-            if (args.length == 0){
+            if (args.length == 0) {
                 sender.sendMessage(ChatColor.RED + "Usage: /team-addpoints <team> <value>");
                 return true;
-            } else if (args.length == 1){
+            } else if (args.length == 1) {
                 amount = 1;
             } else {
                 amount = Integer.parseInt(args[1]);
@@ -120,17 +114,17 @@ public class JunctionPVP  extends JavaPlugin{
             teams.get(args[0]).addPoint(amount);
             sender.sendMessage("Done");
         } else if (name.equalsIgnoreCase("player-printmetadata")){
-            if (args.length != 1){
+            if (args.length != 1) {
                 sender.sendMessage(ChatColor.RED + "Usage: /player-printmetadata <player>");
                 return true;
             }
             Player player = getServer().getPlayer(args[0]);
-            if (player == null){
+            if (player == null) {
                 sender.sendMessage(ChatColor.RED + "Player doesns't exist");
                 return true;
             }
 
-            if (player.hasMetadata("JunctionPVP.team")){
+            if (player.hasMetadata("JunctionPVP.team")) {
                 sender.sendMessage("Team: " + player.getMetadata("JunctionPVP.team").get(0).value());
             } else {
                 sender.sendMessage("Team metadata missing");
