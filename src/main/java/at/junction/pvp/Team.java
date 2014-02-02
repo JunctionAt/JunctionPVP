@@ -147,6 +147,9 @@ class Team {
                 p.sendMessage(String.format("%sWelcome %s to the %s!", getColor(), player.getName(), getName()));
             }
         }
+        //Clear bed spawn on team change. If no bed spawn location exists, listener moves them to team spawn.
+        if (player instanceof Player)
+            ((Player) player).setBedSpawnLocation(null);
     }
 
     public void addPlayer(String playerName) throws Exception {

@@ -76,20 +76,17 @@ public class JunctionPVPListener implements Listener {
 
     /*
     * onPlayerRespawn
-    * Cancel bed spawns in bad areas
+    * Moves players to correct location on spawn
      */
-//    @EventHandler(priority = EventPriority.LOWEST)
-//    public void onPlayerRespawn(PlayerRespawnEvent event) {
-//        if (event.isBedSpawn()) {
-//            plugin.util.debugLogger("Player tried to spawn in bed...");
-//            //If player isn't in their team region, disable bed spawns
-//            if (!plugin.util.isTeamRegion(plugin.teams.get(Team.getPlayerTeamName(event.getPlayer())), event.getRespawnLocation())) {
-//
-//                event.setRespawnLocation(Team.getPlayerTeam(event.getPlayer()).getSpawnLocation());
-//                event.getPlayer().sendMessage("You can only spawn in a bed in your team's region. Back to your team's spawn with you...");
-//            }
-//        }
-//    }
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onPlayerRespawn(PlayerRespawnEvent event) {
+        if (!event.isBedSpawn() || event.getPlayer().getBedSpawnLocation() == null) {
+            if (event.getPlayer().hasMetadata("JunctionPVP.team")) {
+                Team t = plugin.teams.get(event.getPlayer().getMetadata("JunctionPVP.team").get(0).value());
+                event.setRespawnLocation(t.getSpawnLocation());
+            }
+        }
+    }
 
     /*
     * onPlayerEnterbed
