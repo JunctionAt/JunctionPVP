@@ -10,7 +10,6 @@ import org.bukkit.scoreboard.Scoreboard;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.HashSet;
 
 
 class Team {

@@ -16,7 +16,7 @@ import org.bukkit.OfflinePlayer;
 @SuppressWarnings("WeakerAccess")
 public class JunctionPVP  extends JavaPlugin{
     Configuration config;
-    Util util;
+    final Util util = new Util(this);
     //Teams SHOULD BE teamName -> team
     HashMap<String, Team> teams;
     WorldGuardPlugin wg;
@@ -43,8 +43,6 @@ public class JunctionPVP  extends JavaPlugin{
 
         config = new Configuration(this);
         config.load();
-
-        util = new Util(this);
 
         teams = new HashMap<>();
         for(String team : config.TEAM_NAMES){
