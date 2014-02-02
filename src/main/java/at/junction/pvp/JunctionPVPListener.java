@@ -14,6 +14,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
@@ -77,15 +78,30 @@ public class JunctionPVPListener implements Listener {
     * onPlayerRespawn
     * Cancel bed spawns in bad areas
      */
-    @EventHandler(priority = EventPriority.LOWEST)
-    public void onPlayerRespawn(PlayerRespawnEvent event) {
-        if (event.isBedSpawn()) {
-            plugin.util.debugLogger("Player tried to spawn in bed...");
-            //If player isn't in their team region, disable bed spawns
-            if (!plugin.util.isTeamRegion(plugin.teams.get(Team.getPlayerTeamName(event.getPlayer())), event.getRespawnLocation())) {
+//    @EventHandler(priority = EventPriority.LOWEST)
+//    public void onPlayerRespawn(PlayerRespawnEvent event) {
+//        if (event.isBedSpawn()) {
+//            plugin.util.debugLogger("Player tried to spawn in bed...");
+//            //If player isn't in their team region, disable bed spawns
+//            if (!plugin.util.isTeamRegion(plugin.teams.get(Team.getPlayerTeamName(event.getPlayer())), event.getRespawnLocation())) {
+//
+//                event.setRespawnLocation(Team.getPlayerTeam(event.getPlayer()).getSpawnLocation());
+//                event.getPlayer().sendMessage("You can only spawn in a bed in your team's region. Back to your team's spawn with you...");
+//            }
+//        }
+//    }
 
-                event.setRespawnLocation(Team.getPlayerTeam(event.getPlayer()).getSpawnLocation());
-                event.getPlayer().sendMessage("You can only spawn in a bed in your team's region. Back to your team's spawn with you...");
+    /*
+    * onPlayerEnterbed
+    * Deals with players sleeping in beds
+    * Cancels event if not in their teams region
+     */
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onPlayerBedEnter(PlayerBedEnterEvent event) {
+        if (event.getPlayer().hasMetadata("JunctionPVP.team")) {
+            if (!plugin.util.isTeamRegion(plugin.teams.get(event.getPlayer().getMetadata("JunctionPVP.team").get(0).value()), event.getBed().getLocation())){
+                event.getPlayer().sendMessage("You can only sleep in a bed in your teams region");
+                event.setCancelled(true);
             }
         }
     }
