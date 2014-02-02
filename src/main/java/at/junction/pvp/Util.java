@@ -109,9 +109,9 @@ class Util {
             return null;
         }
         return new Location(plugin.getServer().getWorld(loc[0]),
-                Double.parseDouble(loc[1]),
+                Double.parseDouble(loc[1]) + 0.5,
                 Double.parseDouble(loc[2]),
-                Double.parseDouble(loc[3]),
+                Double.parseDouble(loc[3]) + 0.5,
                 Float.parseFloat(loc[4]),
                 Float.parseFloat(loc[5])
         );
