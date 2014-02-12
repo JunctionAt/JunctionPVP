@@ -55,7 +55,7 @@ public class JunctionPVPListener implements Listener {
     * onPlayerMoveEvent
     * Used for initial team joins using portals
      */
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerMoveEvent(PlayerMoveEvent event) {
         Team playerTeam = Team.getPlayerTeam(event.getPlayer());
         for (Team t : Team.getAll()){
@@ -84,7 +84,7 @@ public class JunctionPVPListener implements Listener {
     * onPlayerRespawn
     * Moves players to correct location on spawn
      */
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerRespawn(PlayerRespawnEvent event) {
         if (!event.isBedSpawn() || event.getPlayer().getBedSpawnLocation() == null) {
             Team team = Team.getPlayerTeam(event.getPlayer());
@@ -176,7 +176,7 @@ public class JunctionPVPListener implements Listener {
     * onEntityDamageByEntityEvent
     * If players are on the same team and team has friendly fire disabled, cancel damage
      */
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onEntityDamageByEntityEvent(EntityDamageByEntityEvent event) {
         if (event.getEntity() instanceof Player && event.getDamager() instanceof Player) {
             Player damager = (Player) event.getDamager();
@@ -245,7 +245,7 @@ public class JunctionPVPListener implements Listener {
     }
 
     //Used for PvP Cooldowns
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.HIGHEST)
     private void onPVPDamage(DisallowedPVPEvent event) {
         Player defender = event.getDefender();
         Player attacker = event.getAttacker();
