@@ -58,7 +58,7 @@ public class JunctionPVPListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerMoveEvent(PlayerMoveEvent event) {
         Team playerTeam = Team.getPlayerTeam(event.getPlayer());
-        for (Team t : plugin.teams.values()){
+        for (Team t : Team.getAll()){
             if (t.isPortalLocation((event.getTo()))){
                 //Player is joining a team
                 if (playerTeam == null) {
@@ -197,12 +197,12 @@ public class JunctionPVPListener implements Listener {
     /*
     * Used for team swapping
      */
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockPlaceEvent(BlockPlaceEvent event) {
         if (event.getBlock().getType() != Material.DIAMOND_BLOCK){
             return;
         }
-        for (Team t : plugin.teams.values()){
+        for (Team t : Team.getAll()){
             Location teamJoinLocation = t.getJoinLocation();
             Location blockedPlacedLocation = event.getBlockPlaced().getLocation();
             if (plugin.util.blockEquals(teamJoinLocation, blockedPlacedLocation)){

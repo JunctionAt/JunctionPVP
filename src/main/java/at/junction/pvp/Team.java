@@ -9,7 +9,9 @@ import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 class Team {
@@ -94,6 +96,14 @@ class Team {
         Team t = new Team(plugin, name);
         teamNameMap.put(name, t);
         return t;
+    }
+
+    public static Team get(String name) {
+        return teamNameMap.get(name);
+    }
+
+    public static Set<Team> getAll() {
+        return new HashSet<>(teamNameMap.values());
     }
 
     public static Team getPlayerTeam(OfflinePlayer p) {

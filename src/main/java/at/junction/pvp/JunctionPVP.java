@@ -10,7 +10,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
 import java.io.File;
-import java.util.HashMap;
 import org.bukkit.OfflinePlayer;
 
 @SuppressWarnings("WeakerAccess")
@@ -18,7 +17,6 @@ public class JunctionPVP  extends JavaPlugin{
     Configuration config;
     final Util util = new Util(this);
     //Teams SHOULD BE teamName -> team
-    HashMap<String, Team> teams;
     WorldGuardPlugin wg;
 
     @Override
@@ -44,9 +42,8 @@ public class JunctionPVP  extends JavaPlugin{
         config = new Configuration(this);
         config.load();
 
-        teams = new HashMap<>();
         for(String team : config.TEAM_NAMES){
-            teams.put(team, Team.create(this, team));
+            Team.create(this, team);
         }
 
         getLogger().info("JunctionPVP Enabled");
@@ -64,7 +61,7 @@ public class JunctionPVP  extends JavaPlugin{
     @Override
     public boolean onCommand(CommandSender sender, Command command, String name, String[] args) {
         if (name.equalsIgnoreCase("teams")) {
-            for (Team team : teams.values()) {
+            for (Team team : Team.getAll()) {
                 sender.sendMessage(String.format("%s%s (Score: %s)%s:", team.getColor().toString(), team.getFriendlyName(), team.getScore(), ChatColor.RESET.toString()));
                 sender.sendMessage(team.getFormattedPlayerList());
             }
@@ -79,7 +76,7 @@ public class JunctionPVP  extends JavaPlugin{
                 return true;
             }
             try {
-                teams.get(args[1]).addPlayer(toSwitch);
+                Team.get(args[1]).addPlayer(toSwitch);
                 sender.sendMessage("Done");
             } catch (Exception e) {
                 sender.sendMessage(e.getMessage());
@@ -98,7 +95,7 @@ public class JunctionPVP  extends JavaPlugin{
             Team.getPlayerTeam(op).removePlayer(op);
             sender.sendMessage("Done");
         } else if (name.equalsIgnoreCase("team-print")) {
-            for (Team t : teams.values()) {
+            for (Team t : Team.getAll()) {
                 sender.sendMessage(t.toString());
             }
         } else if (name.equalsIgnoreCase("team-addpoints")) {
@@ -111,7 +108,7 @@ public class JunctionPVP  extends JavaPlugin{
             } else {
                 amount = Integer.parseInt(args[1]);
             }
-            teams.get(args[0]).addPoint(amount);
+            Team.get(args[0]).addPoint(amount);
             sender.sendMessage("Done");
         } else if (name.equalsIgnoreCase("player-printmetadata")){
             if (args.length != 1) {

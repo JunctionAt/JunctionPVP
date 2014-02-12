@@ -57,7 +57,7 @@ class Util {
     Team lowestScoreTeam(){
         int lowScore = Integer.MAX_VALUE;
         Team lowTeam = null;
-        for (Team t : plugin.teams.values()){
+        for (Team t : Team.getAll()){
             if (t.getScore() < lowScore){
                 lowScore = t.getScore();
                 lowTeam = t;
