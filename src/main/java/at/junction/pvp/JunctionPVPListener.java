@@ -179,17 +179,22 @@ public class JunctionPVPListener implements Listener {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onEntityDamageByEntityEvent(EntityDamageByEntityEvent event) {
         if (event.getEntity() instanceof Player && event.getDamager() instanceof Player) {
-            Player damager = (Player) event.getDamager();
-            Player entity = (Player) event.getEntity();
+            Player attacker = (Player) event.getDamager();
+            Player defender = (Player) event.getEntity();
             //If both players are in the PvP region
-            if (plugin.util.isPvpRegion(entity.getLocation()) && plugin.util.isPvpRegion(damager.getLocation())) {
+            if (plugin.util.isPvpRegion(defender.getLocation()) && plugin.util.isPvpRegion(attacker.getLocation())) {
                 //If players are on the same team AND friendly fire is not enabled
-                if (plugin.util.sameTeam(damager, entity) && !Team.getPlayerTeam(damager).getFriendlyFire()) {
+                if (plugin.util.sameTeam(attacker, defender) && !Team.getPlayerTeam(attacker).getFriendlyFire()) {
                     event.setCancelled(true);
-                    damager.sendMessage("Friendly Fire is disabled!");
+                    attacker.sendMessage("Friendly fire is disabled for your team!");
                     return;
                 }
-                plugin.util.resetPvpTimer(damager, entity);
+                plugin.util.resetPvpTimer(attacker, defender);
+            } else if (defender.hasMetadata("pvp")){
+                plugin.util.resetPvpTimer(attacker, defender);
+                if (!attacker.hasMetadata("pvp")){
+                    attacker.sendMessage(String.format("Other players can now attack you for the next %s seconds", plugin.config.PVP_COOLDOWN_TICKS/20));
+                }
             }
         }
     }
@@ -257,8 +262,27 @@ public class JunctionPVPListener implements Listener {
                     return;
                 }
             }
+            if (!plugin.util.hasPvpCooldown(attacker)){
+                attacker.sendMessage(String.format("Other players can now attack you for the next %s seconds", plugin.config.PVP_COOLDOWN_TICKS/20));
+            }
             plugin.util.resetPvpTimer(attacker, defender);
             event.setCancelled(true);
+            return;
+        }
+        if (defender.hasMetadata("pvp")){
+            if (plugin.util.sameTeam(defender, attacker)){
+                if (!Team.getPlayerTeam(defender).getFriendlyFire()){
+                    attacker.sendMessage("Friendly fire is disabled for your team!");
+                    return;
+                }
+            } else {
+                plugin.util.resetPvpTimer(attacker, defender);
+                event.setCancelled(true);
+                if (!attacker.hasMetadata("pvp")){
+                    attacker.sendMessage(String.format("Other players can now attack you for the next %s seconds", plugin.config.PVP_COOLDOWN_TICKS/20));
+                }
+                return;
+            }
         }
     }
 }

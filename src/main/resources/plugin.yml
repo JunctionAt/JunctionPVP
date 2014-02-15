@@ -33,9 +33,16 @@ commands:
     description: Prints relevant metadata
     permission: junction.pvp.team.metadata
     usage: /player-printmetadata <player>
+  pvp:
+    description: Flags a player for pvp anywhere
+    permission: junction.pvp.flag
+    usage: /pvp
 permissions:
   junction.pvp.teams:
     description: Allows a player to list teams
+    default: true
+  junction.pvp.flag:
+    description: Allows /pvp command
     default: true
   junction.pvp.tech:
     description: tech/debug access

@@ -5,6 +5,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
@@ -125,6 +126,19 @@ public class JunctionPVP  extends JavaPlugin{
                 sender.sendMessage("Team: " + player.getMetadata("JunctionPVP.team").get(0).value());
             } else {
                 sender.sendMessage("Team metadata missing");
+            }
+        } else if (name.equalsIgnoreCase("pvp")){
+            if (!(sender instanceof Player)){
+                sender.sendMessage(ChatColor.RED + "This command is only usable by players");
+            } else {
+                Player player = (Player)sender;
+                if (player.hasMetadata("pvp")){
+                    //Remove pvp metadata
+                    player.removeMetadata("pvp", this);
+                } else {
+                    //Add pvp metadata
+                    player.setMetadata("pvp", new FixedMetadataValue(this, "on"));
+                }
             }
         }
 
